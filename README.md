@@ -2,6 +2,9 @@
 # LUCIDus Version 3.0.1
 
 <!-- badges: start -->
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/LUCIDus?color=green)](https://cran.r-project.org/package=LUCIDus)
+![](https://cranlogs.r-pkg.org/badges/grand-total/LUCIDus?color=blue)
+[![](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-image-badge.svg)](https://image.usc.edu)
 <!-- badges: end -->
 
 ![plot](./figure/fig1.png)
