@@ -1,0 +1,21 @@
+Package: LUCIDus
+Title: LUCID with Multi-omics Data
+Version: 3.0.1
+Authors@R: 
+    person("Qiran", "Jia", , "qiranjia@usc.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0790-5967"))
+Description: LUCID version 3, a major update and enhancement from the original release. LUCID version 3 is more robust, and features more powerful model selection, model visualization, inference based on bootstrap resampling, and implements different analysis strategies for multi-omics data with multiple layers. It also incorporates methods to deal with missingness in multi-omics data. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    mclust,
+    nnet,
+    boot, 
+    jsonlite, 
+    networkD3,
+    progress
