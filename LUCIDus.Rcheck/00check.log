@@ -1,0 +1,144 @@
+* using log directory ‘/Users/qiranjia19961112/Desktop/LUCIDus.Rcheck’
+* using R version 4.2.3 (2023-03-15)
+* using platform: aarch64-apple-darwin20 (64-bit)
+* using session charset: UTF-8
+* checking for file ‘LUCIDus/DESCRIPTION’ ... OK
+* this is package ‘LUCIDus’ version ‘3.0.1’
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘LUCIDus’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+Mstep_G: no visible global function definition for ‘glmnet’
+Mstep_G: no visible global function definition for ‘multinom’
+Mstep_G: no visible global function definition for ‘coef’
+Mstep_GtoX: no visible global function definition for ‘glmnet’
+Mstep_GtoX: no visible global function definition for ‘capture.output’
+Mstep_GtoX: no visible global function definition for ‘coef’
+Mstep_XtoY: no visible global function definition for ‘lm’
+Mstep_XtoY: no visible global function definition for ‘coef’
+Mstep_XtoY: no visible global function definition for ‘resid’
+Mstep_XtoY: no visible global function definition for ‘glm’
+Mstep_XtoY: no visible global function definition for ‘as.formula’
+Mstep_XtoY: no visible binding for global variable ‘gaussian’
+Mstep_Z: no visible global function definition for ‘glasso’
+binary : initial.gamma: no visible global function definition for
+  ‘runif’
+binary : f.pYgX: no visible global function definition for ‘dbinom’
+binary : f.maxY: no visible global function definition for ‘glm’
+binary : f.maxY: no visible global function definition for ‘as.formula’
+binary : f.maxY: no visible global function definition for ‘coef’
+est_lucid: no visible global function definition for ‘capture.output’
+est_lucid: no visible global function definition for ‘runif’
+est_lucid: no visible global function definition for ‘coef’
+estimate_lucid: no visible global function definition for ‘runif’
+f_XtoY: no visible global function definition for ‘dnorm’
+f_XtoY: no visible global function definition for ‘dbinom’
+gen_cov_matrices: no visible global function definition for ‘runif’
+initialize_Beta: no visible global function definition for ‘runif’
+initialize_Delta: no visible global function definition for ‘lm’
+initialize_Delta: no visible global function definition for ‘coef’
+initialize_Delta: no visible global function definition for ‘resid’
+initialize_Delta: no visible global function definition for ‘glm’
+initialize_Delta: no visible global function definition for
+  ‘as.formula’
+initialize_Delta: no visible binding for global variable ‘gaussian’
+initialize_Mu: no visible global function definition for ‘runif’
+lucid: no visible global function definition for ‘capture.output’
+lucid_par_early: no visible global function definition for
+  ‘capture.output’
+normal : initial.gamma: no visible global function definition for
+  ‘runif’
+normal : f.pYgX: no visible global function definition for ‘dnorm’
+normal : f.pYgX : <anonymous>: no visible global function definition
+  for ‘dnorm’
+normal : f.maxY: no visible global function definition for ‘glm’
+normal : f.maxY: no visible global function definition for ‘as.formula’
+normal : f.maxY: no visible binding for global variable ‘gaussian’
+normal : f.maxY: no visible global function definition for ‘sd’
+normal : f.maxY: no visible global function definition for ‘residuals’
+pred_lucid: no visible global function definition for ‘predict’
+Undefined global functions or variables:
+  as.formula capture.output coef dbinom dnorm gaussian glasso glm
+  glmnet lm multinom predict resid residuals runif sd
+Consider adding
+  importFrom("stats", "as.formula", "coef", "dbinom", "dnorm",
+             "gaussian", "glm", "lm", "predict", "resid", "residuals",
+             "runif", "sd")
+  importFrom("utils", "capture.output")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... WARNING
+Undocumented data sets:
+  ‘sim_data’
+All user-level objects in a package should have documentation entries.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'Istep_Z'
+  ‘lucid_model’
+
+Undocumented arguments in documentation object 'est_lucid'
+  ‘tol’
+
+Undocumented arguments in documentation object 'estimate_lucid'
+  ‘tol’
+
+Undocumented arguments in documentation object 'fill_data'
+  ‘lucid_model’
+
+Documented arguments not in \usage in documentation object 'lucid':
+  ‘init_omic.data.model’
+
+Undocumented arguments in documentation object 'tune_lucid'
+  ‘lucid_model’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... WARNING
+Files not of a type allowed in a ‘data’ directory:
+  ‘simulated_HELIX_data.RDS’
+Please use e.g. ‘inst/extdata’ for non-R data files
+
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... WARNING
+  Warning: package needs dependence on R (>= 2.10)
+* checking examples ... OK
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ... OK
+  Running ‘testthat.R’
+* checking PDF version of manual ... OK
+* DONE
+Status: 4 WARNINGs, 1 NOTE

@@ -1,0 +1,3 @@
+load("/Users/qiranjia19961112/Desktop/LUCIDusM/data/simulated_HELIX_data_2.RDS")
+load("/Users/qiranjia19961112/Desktop/LUCIDusM/data/simulated_HELIX_data.RDS")
+load("/Users/qiranjia19961112/Desktop/LUCIDusM/data/simulated_HELIX_data.RDS")

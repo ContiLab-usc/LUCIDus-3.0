@@ -1,0 +1,220 @@
+pkgname <- "LUCIDus"
+source(file.path(R.home("share"), "R", "examples-header.R"))
+options(warn = 1)
+library('LUCIDus')
+
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+cleanEx()
+nameEx("boot_lucid")
+### * boot_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: boot_lucid
+### Title: Inference of LUCID model based on bootstrap resampling
+### Aliases: boot_lucid
+
+### ** Examples
+
+## Not run: 
+##D # use simulated data
+##D G <- sim_data$G
+##D Z <- sim_data$Z
+##D Y_normal <- sim_data$Y_normal
+##D 
+##D # fit lucid model
+##D fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal", K = 2,
+##D seed = 1008)
+##D 
+##D # conduct bootstrap resampling
+##D boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early",model = fit1, R = 100)
+##D 
+##D # check distribution for bootstrap replicates of the variable of interest
+##D plot(boot1$bootstrap, 1)
+##D 
+##D # use 90% CI
+##D boot2 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", model = fit1, R = 100, conf = 0.9)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("est_lucid")
+### * est_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: est_lucid
+### Title: Fit LUCID models with one or multiple omics layers.
+### Aliases: est_lucid
+
+### ** Examples
+
+## Not run: 
+##D i <- 1008
+##D set.seed(i)
+##D G <- matrix(rnorm(500), nrow = 100)
+##D Z1 <- matrix(rnorm(1000),nrow = 100)
+##D Z2 <- matrix(rnorm(1000), nrow = 100)
+##D Z3 <- matrix(rnorm(1000), nrow = 100)
+##D Z <- list(Z1 = Z1, Z2 = Z2, Z2 = Z3)
+##D CoY <- matrix(rnorm(200), nrow = 100)
+##D CoG <- matrix(rnorm(200), nrow = 100)
+##D Y <- rnorm(100)
+##D fit1 <- est_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), CoG = CoG, CoY = CoY,
+##D lucid_model = "parallel",
+##D family = "normal",
+##D init_omic.data.model = "VVV",
+##D seed = i,
+##D init_impute = "mclust",
+##D init_par = "mclust",
+##D useY = TRUE)
+## End(Not run)
+
+
+
+
+cleanEx()
+nameEx("estimate_lucid")
+### * estimate_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: estimate_lucid
+### Title: Fit LUCID models with one or multiple omics layers
+### Aliases: estimate_lucid
+
+### ** Examples
+
+## Not run: 
+##D i <- 1008
+##D set.seed(i)
+##D G <- matrix(rnorm(500), nrow = 100)
+##D Z1 <- matrix(rnorm(1000),nrow = 100)
+##D Z2 <- matrix(rnorm(1000), nrow = 100)
+##D Z3 <- matrix(rnorm(1000), nrow = 100)
+##D Z4 <- matrix(rnorm(1000), nrow = 100)
+##D Z5 <- matrix(rnorm(1000), nrow = 100)
+##D Z <- list(Z1 = Z1, Z2 = Z2, Z3 = Z3, Z4 = Z4, Z5 = Z5)
+##D Y <- rnorm(100)
+##D CoY <- matrix(rnorm(200), nrow = 100)
+##D CoG <- matrix(rnorm(200), nrow = 100)
+##D fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = list(2,2,2,2,2),
+##D lucid_model = "serial",
+##D family = "normal",
+##D seed = i,
+##D CoG = CoG, CoY = CoY,
+##D useY = TRUE)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("predict_lucid")
+### * predict_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: predict_lucid
+### Title: Predict cluster assignment and outcome based on LUCID model
+### Aliases: predict_lucid
+
+### ** Examples
+
+## Not run: 
+##D # prepare data
+##D G <- sim_data$G
+##D Z <- sim_data$Z
+##D Y_normal <- sim_data$Y_normal
+##D 
+##D # fit lucid model
+##D fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", K = 2, family = "normal")
+##D 
+##D # prediction on training set
+##D pred1 <- predict_lucid(model = fit1, G = G, Z = Z, Y = Y_normal, lucid_model = "early")
+##D pred2 <- predict_lucid(model = fit1, G = G, Z = Z, lucid_model = "early")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("summary_lucid")
+### * summary_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: summary_lucid
+### Title: Summarize results of LUCID model
+### Aliases: summary_lucid
+
+### ** Examples
+
+## Not run: 
+##D # use simulated data
+##D G <- sim_data$G
+##D Z <- sim_data$Z
+##D Y_normal <- sim_data$Y_normal
+##D 
+##D # fit lucid model
+##D fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal", K = 2,
+##D seed = 1008)
+##D 
+##D # conduct bootstrap resampling
+##D boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", model = fit1, R = 100)
+##D 
+##D # summarize lucid model
+##D summary_lucid(fit1)
+##D 
+##D # summarize lucid model with bootstrap CIs
+##D summary_lucid(fit1, boot.se = boot1)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("tune_lucid")
+### * tune_lucid
+
+flush(stderr()); flush(stdout())
+
+### Name: tune_lucid
+### Title: A wrapper function to perform model selection for LUCID
+### Aliases: tune_lucid
+
+### ** Examples
+
+## Not run: 
+##D # use simulated data
+##D G <- sim_data$G
+##D Z <- sim_data$Z
+##D Y_normal <- sim_data$Y_normal
+##D 
+##D # find the optimal model over the grid of K
+##D tune_K <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+##D seed = 1, K = 2:5)
+##D 
+##D # tune penalties
+##D tune_Rho_G <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+##D seed = 1, K = 2, Rho_G = c(0.1, 0.2, 0.3, 0.4))
+##D tune_Rho_Z_Mu <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+##D seed = 1, K = 2, Rho_Z_Mu = c(10, 20, 30, 40))
+##D tune_Rho_Z_Cov <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+##D seed = 1, K = 2, Rho_Z_Cov = c(0.1, 0.2, 0.3))
+## End(Not run)
+
+
+
+
+### * <FOOTER>
+###
+cleanEx()
+options(digits = 7L)
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+grDevices::dev.off()
+###
+### Local variables: ***
+### mode: outline-minor ***
+### outline-regexp: "\\(> \\)?### [*]+" ***
+### End: ***
+quit('no')
