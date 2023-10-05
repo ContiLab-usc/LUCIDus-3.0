@@ -4,10 +4,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-![plot](./figure/fig.pdf)
+![plot](./figure/fig1.png)
 
 LUCID version 3, a major update and enhancement from the original release. LUCID version 3 is more robust, and features more powerful model selection, model visualization, inference based on bootstrap resampling, and implements different analysis strategies for multi-omics data with multiple layers. It also incorporates methods to deal with missingness in multi-omics data. 
-
+![plot](./figure/fig2.png)
 ## Installation
 
 You can install the development version of LUCIDusM from [GitHub](https://github.com/) with:
