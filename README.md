@@ -24,7 +24,7 @@ Lab](https://contilab.usc.edu/about/) to learn more.
 
 ## Installation
 
-You can install the development version of LUCIDusM from [GitHub](https://github.com/) with:
+You can install the development version of LUCIDus 3.0.1 from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
