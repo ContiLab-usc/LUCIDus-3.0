@@ -77,7 +77,7 @@ Mstep_G <- function(G, r, selectG, penalty, dimG, dimCoG, K) {
     }
   }
   else{
-    beta.multilogit <- multinom(as.matrix(r) ~ as.matrix(G))
+    beta.multilogit <- nnet::multinom(as.matrix(r) ~ as.matrix(G))
     new.beta[-1, ] <- coef(beta.multilogit)
   }
   return(new.beta)
