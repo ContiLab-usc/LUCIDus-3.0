@@ -142,7 +142,26 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
 #' @param x An object returned by \code{summary_lucid}
 #' @param ... Other parameters to be passed to \code{print}
 #' @export
+#' @examples
+#' \dontrun{
+#' # use simulated data
+#' G <- sim_data$G
+#' Z <- sim_data$Z
+#' Y_normal <- sim_data$Y_normal
 #'
+#' # fit lucid model
+#' fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal", K = 2,
+#' seed = 1008)
+#'
+#' # conduct bootstrap resampling
+#' boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", model = fit1, R = 100)
+#'
+#' # print the summary of the lucid model in a table
+#' print.sumlucid(summary_lucid(fit1))
+#'
+#' # print the summary of the lucid model with bootstrap CIs in a table
+#' print.sumlucid(summary_lucid(fit1, boot.se = boot1))
+#' }
 
 print.sumlucid<- function(x, ...){
   if (class(x) == "sumlucid_early" | class(x) == "sumlucid_parallel"){
@@ -688,13 +707,7 @@ reorder_z <- function(z, K_order) {
 }
 
 
-#' function to reorder all model parameters
-#'
-#' @param model A model returned by EM_lucid
-#'
-#' @return A LUCID model reordered by effect size of outcome
-#' @export
-#'
+###function to reorder all model parameters###
 reorder_lucid <- function(model) {
   ref <- get_ref_cluster(Delta = model$res_Delta$Delta)
   r_Delta <- reorder_Delta(ref = ref,

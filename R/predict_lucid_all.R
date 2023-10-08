@@ -6,9 +6,8 @@
 #' @param G Exposures, a numeric vector, matrix, or data frame. Categorical variable
 #' should be transformed into dummy variables. If a matrix or data frame, rows
 #' represent observations and columns correspond to variables.
-#' @param Z Omics data,if "early", a numeric matrix or data frame. Rows correspond to observations
-#' and columns correspond to variables; if "parallel", a list, each element is a matrix with N rows;
-#' If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows
+#' @param Z Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+#' If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features
 #' @param Y Outcome, a numeric vector. Categorical variable is not allowed. Binary
 #' outcome should be coded as 0 and 1.
 #' @param CoG Optional, covariates to be adjusted for estimating the latent cluster.
@@ -19,7 +18,7 @@
 #' Categorical variable should be transformed into dummy variables.
 #' @param response If TRUE, when predicting binary outcome, the response will be
 #' returned. If FALSE, the linear predictor is returned.
-#' @return A list contains predicted latent cluster, PIP and outcome for each observation
+#' @return A list contains predicted latent cluster, inclusion probability and outcome for each observation
 #' @export
 #'
 #' @examples

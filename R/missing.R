@@ -1,7 +1,7 @@
-#' @title Check missing patterns in omics data Z
-#' @param Z A data matrix representing omics data
+#' @title Check missing patterns in one layer of omics data Z
+#' @param Z A data matrix representing one layer of omics data
 #' @return
-#' 1. index:indeces for missing values in omics data
+#' 1. index:indeces for missing values in the omics data
 #' 2. indicator_na: missing pattern for each observation
 #' 3. impute_flag: - flag to initialize imputation. Only happens when sporadic missing
 #' pattern is observed

@@ -1,27 +1,13 @@
 
 ####################utility functions for the EM algorithm of LUCID in parallel####################
-#' Log-Sum-Exp Trick
-#'
-#' Computes the log-sum-exp trick for a vector.
-#'
-#' @param vec A numeric vector.
-#' @return The result of the log-sum-exp trick.
-#'
-#'
+
 LogSumExp <- function(vec) {
   max_vec <- max(vec)
   trick <- max_vec + log(sum(exp(vec - max_vec)))
   return(trick)
 }
 
-#' Get the Last 'n' Elements of an Array
-#'
-#' Retrieves the last 'n' elements from a vector or array.
-#'
-#' @param x A vector or array.
-#' @param n The number of elements to retrieve.
-#' @return A vector or array containing the last 'n' elements.
-#'
+
 
 lastInd <- function(x, n){
   d <- dim(x)
@@ -31,12 +17,7 @@ lastInd <- function(x, n){
   array(res, dim = d.new)
 }
 
-#' Check Validity of 'K'
-#'
-#' Checks if the elements in 'K' are integers and greater than or equal to 2.
-#'
-#' @param K A vector of integers.
-#'
+
 
 check_K <- function(K) {
   for(x in K) {
@@ -50,13 +31,7 @@ check_K <- function(K) {
 }
 
 
-#' Initialize Beta
-#'
-#' Initializes the Beta parameter for the EM algorithm.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param nG The number of exposures.
-#'
+
 
 initialize_Beta <- function(K, nG) {
   nOmics <- length(K)
@@ -69,13 +44,6 @@ initialize_Beta <- function(K, nG) {
   return(Beta)
 }
 
-#' Initialize Mu
-#'
-#' Initializes the Mu parameter for the EM algorithm.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param nZ A vector specifying the number of variables for each omics layer.
-#'
 
 initialize_Mu <- function(K, nZ) {
   nOmics <- length(K)
@@ -89,13 +57,6 @@ initialize_Mu <- function(K, nZ) {
 }
 
 
-#' Initialize Sigma
-#'
-#' Initializes the Sigma parameter for the EM algorithm.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param nZ A vector specifying the number of variables for each omics layer.
-#'
 
 initialize_Sigma <- function(K, nZ) {
   nOmics <- length(K)
@@ -112,15 +73,7 @@ initialize_Sigma <- function(K, nZ) {
 
 
 
-#' Initialize Mu and Sigma
-#'
-#' Initializes the Mu and Sigma parameters for the EM algorithm.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param Z A list of matrices representing the data for each omics layer.
-#' @param modelNames A list of model names for each omics layer.
-#' @param na_pattern A list of NA patterns for each omics layer.
-#'
+
 
 initialize_Mu_Sigma <- function(K, Z, modelNames, na_pattern) {
   nOmics <- length(K)
@@ -141,16 +94,7 @@ initialize_Mu_Sigma <- function(K, Z, modelNames, na_pattern) {
               z = z))
 }
 
-#' Initialize Delta
-#'
-#' Initializes the Delta parameter for the EM algorithm.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param CoY A data frame for covariates (optional).
-#' @param family The distribution family ("gaussian" or "binomial").
-#' @param z A list of matrices representing the clustering assignments for each omics layer.
-#' @param Y The outcome variable.
-#'
+
 
 initialize_Delta <- function(K, CoY, family = c("gaussian", "binomial"),
                              z, Y) {
@@ -348,13 +292,7 @@ initialize_Delta <- function(K, CoY, family = c("gaussian", "binomial"),
 }
 
 
-#' Indicator Function
-#'
-#' Computes an indicator function.
-#'
-#' @param x A numeric value.
-#' @return 1 if x > 1, otherwise 0.
-#'
+
 
 indicator <- function(x) {
   m <- 0
@@ -364,14 +302,6 @@ indicator <- function(x) {
   return(m)
 }
 
-#' Transform Mu to an Array
-#'
-#' Transforms a vector of Mu values to an array based on the number of clusters.
-#'
-#' @param K A vector specifying the number of clusters for each omics layer.
-#' @param mu A vector of Mu values.
-#' @return A multi-dimensional array of Mu values.
-#'
 
 vec_to_array <- function(K, mu) {
   res <- array(data = rep(0, prod(K)),

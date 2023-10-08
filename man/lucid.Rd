@@ -25,9 +25,8 @@ lucid(
 should be transformed into dummy variables. If a matrix or data frame, rows
 represent observations and columns correspond to variables.}
 
-\item{Z}{Omics data, a numeric matrix or data frame. Rows correspond to observations
-and columns correspond to variables. If "early", an N by M matrix; If "parallel", a list,
-each element is a matrix with N rows;
+\item{Z}{Omics data. If "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features
 If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows}
 
 \item{Y}{Outcome, a numeric vector. Categorical variable is not allowed. Binary
@@ -44,33 +43,36 @@ Categorical variable should be transformed into dummy variables.}
 \item{family}{Distribution of outcome. For continuous outcome, use "normal";
 for binary outcome, use "binary". Default is "normal".}
 
-\item{K}{Number of latent clusters (should be greater or equal than 2).
+\item{K}{Number of latent clusters. For lucid_model = "early", number of latent clusters (should be greater or equal than 2).
 Either an integer or a vector of integer. If K is a vector, model selection
-on K is performed. If "early", an integer;If "parallel",an integer vector, same length as Z;
-If "serial", a list, each element is either an integer or an list of integers, same length as Z}
+on K is performed. For lucid_model = "parallel",an integer vector, same length as Z,
+if the element itself is a vector, model selection on K is performed;
+For lucid_model = "serial", a list, each element is either an integer or an list of integers, same length as Z,
+if the smallest element (integer) itself is a vector, model selection on K is performed}
 
 \item{lucid_model}{Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
 "serial" for lucid in serial}
 
 \item{Rho_G}{A scalar or a vector. This parameter is the LASSO penalty to regularize
 exposures. If it is a vector, \code{lucid} will call \code{tune_lucid} to conduct
-model selection and variable selection. User can try penalties from 0 to 1. Work or LUCID early only.}
+model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.}
 
 \item{Rho_Z_Mu}{A scalar or a vector. This parameter is the LASSO penalty to
 regularize cluster-specific means for omics data (Z). If it is a vector,
 \code{lucid} will call \code{tune_lucid} to conduct model selection and
-variable selection. User can try penalties from 1 to 100. Work or LUCID early only.}
+variable selection. User can try penalties from 1 to 100. Work for LUCID early only.}
 
 \item{Rho_Z_Cov}{A scalar or a vector. This parameter is the graphical LASSO
 penalty to estimate sparse cluster-specific variance-covariance matrices for omics
 data (Z). If it is a vector, \code{lucid} will call \code{tune_lucid} to conduct
-model selection and variable selection. User can try penalties from 0 to 1. Work or LUCID early only.}
+model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.}
 
 \item{verbose_tune}{A flag to print details of tuning process.}
 
 \item{...}{Other parameters passed to \code{estimate_lucid}}
 
-\item{init_omic.data.model}{a vector of strings specifies the geometric model of omics}
+\item{init_omic.data.model}{a vector of strings specifies the geometric model of omics
+data. If NULL, See more in ?mclust::mclustModelNames}
 }
 \value{
 An optimal lucid model

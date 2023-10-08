@@ -14,3 +14,24 @@
 \description{
 Print the output of LUCID in a nicer table
 }
+\examples{
+\dontrun{
+# use simulated data
+G <- sim_data$G
+Z <- sim_data$Z
+Y_normal <- sim_data$Y_normal
+
+# fit lucid model
+fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal", K = 2,
+seed = 1008)
+
+# conduct bootstrap resampling
+boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", model = fit1, R = 100)
+
+# print the summary of the lucid model in a table
+print.sumlucid(summary_lucid(fit1))
+
+# print the summary of the lucid model with bootstrap CIs in a table
+print.sumlucid(summary_lucid(fit1, boot.se = boot1))
+}
+}

@@ -3,31 +3,32 @@
 #' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
 #' "serial" for lucid in serial
 #' @param G an N by P matrix representing exposures
-#' @param Z If "early", an N by M matrix; If "parallel", a list, each element is a matrix with N rows;
-#' If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows
+#' @param Z Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+#' If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features
 #' @param Y a length N vector
 #' @param CoG an N by V matrix representing covariates to be adjusted for G -> X
 #' @param CoY an N by K matrix representing covariates to be adjusted for X -> Y
-#' @param K If "early", an integer;If "parallel",an integer vector, same length as Z;
-#' If "serial", a list, each element is either an integer or an list of integers, same length as Z
+#' @param K Number of latent clusters. If "early", an integer greater or equal to 2; If "parallel",an integer vector, same length as Z, with each element being an interger greater or equal to 2;
+#' If "serial", a list, each element is either an integer like that for "early" or an list of integers like that for "parallel", same length as Z
 #' @param init_omic.data.model a vector of strings specifies the geometric model of omics
 #' data. If NULL, See more in ?mclust::mclustModelNames
 #' @param useY logical, if TRUE, EM algorithm fits a supervised LUCID; otherwise
 #' unsupervised LUCID.
 #' @param max_itr Maximum iterations of the EM algorithm. If the EM algorithm iterates
 #' more than max_itr without converging, the EM algorithm is forced to stop.
-#' @param max_tot.itr Max number of total iterations for \code{est_lucid} function.
-#' \code{est_lucid} may conduct EM algorithm for multiple times if the algorithm
-#' fails to converge.(to be done)
+#' @param max_tot.itr Max number of total iterations for \code{estimate_lucid} function.
+#' \code{estimate_lucid} may conduct EM algorithm for multiple times if the algorithm
+#' fails to converge.
 #' @param Rho_G A scalar. This parameter is the LASSO penalty to regularize
 #' exposures. If user wants to tune the penalty, use the wrapper
-#' function \code{lucid}
+#' function \code{lucid}. Now only achieved for LUCID early integration.
 #' @param Rho_Z_Mu A scalar. This parameter is the LASSO penalty to
 #' regularize cluster-specific means for omics data (Z). If user wants to tune the
-#' penalty, use the wrapper function \code{lucid}
+#' penalty, use the wrapper function \code{lucid}.Now only achieved for LUCID early integration.
 #' @param Rho_Z_Cov A scalar. This parameter is the graphical LASSO
 #' penalty to estimate sparse cluster-specific variance-covariance matrices for omics
-#' data (Z). If user wants to tune the penalty, use the wrapper function \code{lucid}
+#' data (Z). If user wants to tune the penalty, use the wrapper function \code{lucid}.
+#' Now only achieved for LUCID early integration.
 #' @param family The distribution of the outcome
 #' @param seed Random seed to initialize the EM algorithm
 #' @param init_impute Method to initialize the imputation of missing values in

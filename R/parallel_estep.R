@@ -6,16 +6,7 @@
 
 
 
-#' @title log S(X|G)
-#'
-#' @description Calculate the log prior inclusion probability for omics layer X_j
-#' given the exposures G
-#'
-#' @param G an N by P matrix
-#' @param Beta_matrix a (P + 1) by (K - 1) matrix
-#'
-#' @return an N by K matrix
-#'
+#Calculate the log prior inclusion probability for omics layer X_j given the exposures G
 
 f_GtoX <- function(G, Beta_matrix) {
   N <- nrow(G)
@@ -27,17 +18,7 @@ f_GtoX <- function(G, Beta_matrix) {
 }
 
 
-#' @title log f(Z|X)
-#'
-#' @description calculate the log likelihood for omics layer Z_j given the latent
-#' cluster X_j
-#'
-#' @param Z an N by M matrix
-#' @param Mu_matrix an M by K matrix
-#' @param Sigma_matrix an M by M by K array
-#'
-#' @return an N by K matrix
-#'
+# calculate the log likelihood for omics layer Z_j given the latent cluster X_j
 
 f_XtoZ <- function(Z, Mu_matrix, Sigma_matrix) {
   N <- nrow(Z)
@@ -53,18 +34,7 @@ f_XtoZ <- function(Z, Mu_matrix, Sigma_matrix) {
 }
 
 
-#' @title log f(Y|X)
-#'
-#' @description Calculate the log likelihood of outcome Y given all latent variables
-#' X
-#'
-#' @param Y an N by 1 matrix
-#' @param Delta a list with parameters related to outcome
-#' @param family a string, either gaussian or binomial
-#'
-#' @return for 2 omics layers, an K1 by K2 by N matrix; for 3 omics layers, an
-#' K1 by K2 by K3 by N matrix
-#'
+# Calculate the log likelihood of outcome Y given all latent variables X
 
 f_XtoY <- function(Y, Delta, family) {
 

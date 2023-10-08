@@ -25,9 +25,8 @@ predict_lucid(
 should be transformed into dummy variables. If a matrix or data frame, rows
 represent observations and columns correspond to variables.}
 
-\item{Z}{Omics data,if "early", a numeric matrix or data frame. Rows correspond to observations
-and columns correspond to variables; if "parallel", a list, each element is a matrix with N rows;
-If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows}
+\item{Z}{Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features}
 
 \item{Y}{Outcome, a numeric vector. Categorical variable is not allowed. Binary
 outcome should be coded as 0 and 1.}
@@ -44,7 +43,7 @@ Categorical variable should be transformed into dummy variables.}
 returned. If FALSE, the linear predictor is returned.}
 }
 \value{
-A list contains predicted latent cluster, PIP and outcome for each observation
+A list contains predicted latent cluster, inclusion probability and outcome for each observation
 }
 \description{
 Predict cluster assignment and outcome based on LUCID model

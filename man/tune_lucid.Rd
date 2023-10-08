@@ -24,8 +24,8 @@ tune_lucid(
 should be transformed into dummy variables. If a matrix or data frame, rows
 represent observations and columns correspond to variables.}
 
-\item{Z}{If "early", an N by M matrix; If "parallel", a list, each element is a matrix with N rows;
-If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows.}
+\item{Z}{Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features}
 
 \item{Y}{Outcome, a numeric vector. Categorical variable is not allowed. Binary
 outcome should be coded as 0 and 1.}
@@ -49,19 +49,19 @@ for LUCID in serial, K = list(list(2:3,2),2:3)}
 
 \item{Rho_G}{A scalar or a vector. This parameter is the LASSO penalty to regularize
 exposures. If it is a vector, \code{tune_lucid} will conduct
-model selection and variable selection. User can try penalties from 0 to 1. Work or LUCID early only.}
+model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.}
 
 \item{Rho_Z_Mu}{A scalar or a vector. This parameter is the LASSO penalty to
 regularize cluster-specific means for omics data (Z). If it is a vector,
 \code{tune_lucid} will conduct model selection and
-variable selection. User can try penalties from 1 to 100. Work or LUCID early only.}
+variable selection. User can try penalties from 1 to 100. Work for LUCID early only.}
 
 \item{Rho_Z_Cov}{A scalar or a vector. This parameter is the graphical LASSO
 penalty to estimate sparse cluster-specific variance-covariance matrices for omics
 data (Z). If it is a vector, \code{tune_lucid} will conduct
-model selection and variable selection. User can try penalties from 0 to 1. Work or LUCID early only.}
+model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.}
 
-\item{...}{Other parameters passed to \code{est_lucid}}
+\item{...}{Other parameters passed to \code{estimate_lucid}}
 }
 \value{
 A list:

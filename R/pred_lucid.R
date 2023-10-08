@@ -1,26 +1,5 @@
-#' @title Predict cluster assignment and outcome based on LUCID model or "early" and "parallel" only.
-#' @description Sub function for predict_lucid_all(). Don't directly call it.
-#' Not including lucid in serial.
-#' @param model A model fitted and returned by \code{\link{estimate_lucid}}, "early" and "parallel".
-#' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel.
-#' @param G Exposures, a numeric vector, matrix, or data frame. Categorical variable
-#' should be transformed into dummy variables. If a matrix or data frame, rows
-#' represent observations and columns correspond to variables.
-#' @param Z Omics data,if "early", a numeric matrix or data frame. Rows correspond to observations
-#' and columns correspond to variables; if "parallel", a list, each element is a matrix with N rows.
-#' @param Y Outcome, a numeric vector. Categorical variable is not allowed. Binary
-#' outcome should be coded as 0 and 1.
-#' @param CoG Optional, covariates to be adjusted for estimating the latent cluster.
-#' A numeric vector, matrix or data frame. Categorical variable should be transformed
-#' into dummy variables.
-#' @param CoY Optional, covariates to be adjusted for estimating the association
-#' between latent cluster and the outcome. A numeric vector, matrix or data frame.
-#' Categorical variable should be transformed into dummy variables.
-#' @param response If TRUE, when predicting binary outcome, the response will be
-#' returned. If FALSE, the linear predictor is returned.
-#' @return A list contains predicted latent cluster and outcome for each observation
-#' @export
-
+############workhorse function for predict_lucid############
+############prediction for "early", "parallel"############
 
 pred_lucid <- function(model,
                           lucid_model = c("early", "parallel"),

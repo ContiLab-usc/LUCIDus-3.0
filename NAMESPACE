@@ -2,13 +2,10 @@
 
 S3method(print,sumlucid)
 export(boot_lucid)
-export(est_lucid)
 export(estimate_lucid)
 export(lucid)
 export(plot_lucid)
-export(pred_lucid)
 export(predict_lucid)
-export(reorder_lucid)
 export(summary_lucid)
 export(tune_lucid)
 import(boot)

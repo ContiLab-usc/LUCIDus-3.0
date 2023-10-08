@@ -33,8 +33,8 @@ estimate_lucid(
 
 \item{G}{an N by P matrix representing exposures}
 
-\item{Z}{If "early", an N by M matrix; If "parallel", a list, each element is a matrix with N rows;
-If "serial", a list, each element is a matrix with N rows or a list with two or more matrices with N rows}
+\item{Z}{Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
+If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features}
 
 \item{Y}{a length N vector}
 
@@ -42,8 +42,8 @@ If "serial", a list, each element is a matrix with N rows or a list with two or 
 
 \item{CoY}{an N by K matrix representing covariates to be adjusted for X -> Y}
 
-\item{K}{If "early", an integer;If "parallel",an integer vector, same length as Z;
-If "serial", a list, each element is either an integer or an list of integers, same length as Z}
+\item{K}{Number of latent clusters. If "early", an integer greater or equal to 2; If "parallel",an integer vector, same length as Z, with each element being an interger greater or equal to 2;
+If "serial", a list, each element is either an integer like that for "early" or an list of integers like that for "parallel", same length as Z}
 
 \item{init_omic.data.model}{a vector of strings specifies the geometric model of omics
 data. If NULL, See more in ?mclust::mclustModelNames}
@@ -54,21 +54,22 @@ unsupervised LUCID.}
 \item{max_itr}{Maximum iterations of the EM algorithm. If the EM algorithm iterates
 more than max_itr without converging, the EM algorithm is forced to stop.}
 
-\item{max_tot.itr}{Max number of total iterations for \code{est_lucid} function.
-\code{est_lucid} may conduct EM algorithm for multiple times if the algorithm
-fails to converge.(to be done)}
+\item{max_tot.itr}{Max number of total iterations for \code{estimate_lucid} function.
+\code{estimate_lucid} may conduct EM algorithm for multiple times if the algorithm
+fails to converge.}
 
 \item{Rho_G}{A scalar. This parameter is the LASSO penalty to regularize
 exposures. If user wants to tune the penalty, use the wrapper
-function \code{lucid}}
+function \code{lucid}. Now only achieved for LUCID early integration.}
 
 \item{Rho_Z_Mu}{A scalar. This parameter is the LASSO penalty to
 regularize cluster-specific means for omics data (Z). If user wants to tune the
-penalty, use the wrapper function \code{lucid}}
+penalty, use the wrapper function \code{lucid}.Now only achieved for LUCID early integration.}
 
 \item{Rho_Z_Cov}{A scalar. This parameter is the graphical LASSO
 penalty to estimate sparse cluster-specific variance-covariance matrices for omics
-data (Z). If user wants to tune the penalty, use the wrapper function \code{lucid}}
+data (Z). If user wants to tune the penalty, use the wrapper function \code{lucid}.
+Now only achieved for LUCID early integration.}
 
 \item{family}{The distribution of the outcome}
 

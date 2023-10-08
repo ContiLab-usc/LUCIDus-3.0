@@ -21,7 +21,7 @@ boot_lucid(
 should be transformed into dummy variables. If a matrix or data frame, rows
 represent observations and columns correspond to variables.}
 
-\item{Z}{Omics data, a numeric matrix or data frame. Rows correspond to observations
+\item{Z}{Omics data for LUCID early integration, a numeric matrix or data frame. Rows correspond to observations
 and columns correspond to variables.}
 
 \item{Y}{Outcome, a numeric vector. Categorical variable is not allowed. Binary
@@ -59,7 +59,7 @@ outcome}
 Generate \code{R} bootstrap replicates of LUCID parameters and
 derive confidence interval (CI) base on bootstrap. Bootstrap replicates are
 generated based on nonparameteric resampling, implemented by \code{ordinary}
-method of code{boot::boot} function. Now only work for LUCID early.
+method of code{boot::boot} function. Now only achieved for LUCID early integration.
 }
 \examples{
 \dontrun{
