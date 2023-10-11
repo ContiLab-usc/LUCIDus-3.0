@@ -70,9 +70,6 @@ model selection and variable selection. User can try penalties from 0 to 1. Work
 \item{verbose_tune}{A flag to print details of tuning process.}
 
 \item{...}{Other parameters passed to \code{estimate_lucid}}
-
-\item{init_omic.data.model}{a vector of strings specifies the geometric model of omics
-data. If NULL, See more in ?mclust::mclustModelNames}
 }
 \value{
 An optimal lucid model

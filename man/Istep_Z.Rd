@@ -17,6 +17,9 @@ latent cluster}
 \item{sigma}{an M by M by K array representing cluster-specific covariance}
 
 \item{index}{an N by M matrix representing missing values in Z}
+
+\item{lucid_model}{Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
+"serial" for lucid in serial}
 }
 \value{
 a complete dataset of Z

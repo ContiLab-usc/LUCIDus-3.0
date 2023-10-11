@@ -17,6 +17,9 @@ fill_data(obs, mu, sigma, p, index, lucid_model)
 
 \item{index}{a vector of length M, indicating whether a value is missing
 or not in the raw data}
+
+\item{lucid_model}{Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
+"serial" for lucid in serial}
 }
 \value{
 an observation with updated imputed value

@@ -51,6 +51,8 @@ data. If NULL, See more in ?mclust::mclustModelNames}
 \item{useY}{logical, if TRUE, EM algorithm fits a supervised LUCID; otherwise
 unsupervised LUCID.}
 
+\item{tol}{stopping criterion for the EM algorithm}
+
 \item{max_itr}{Maximum iterations of the EM algorithm. If the EM algorithm iterates
 more than max_itr without converging, the EM algorithm is forced to stop.}
 
