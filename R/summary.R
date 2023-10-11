@@ -27,10 +27,10 @@
 #' }
 
 summary_lucid <- function(object, boot.se = NULL){
-  if (class(object) == "early_lucid" | class(object) == "lucid_parallel"){
+  if (inherits(object, "early_lucid") | inherits(object, "lucid_parallel")){
     summary_lucid_auxi(object = object, boot.se = boot.se)
   }
-  else if (class(object) == "lucid_serial"){
+  else if (inherits(object, "lucid_serial")){
     K = object$K
     submodels = object$submodel
     n_submodels = length(submodels)
@@ -61,7 +61,7 @@ summary_lucid <- function(object, boot.se = NULL){
 
 
 summary_lucid_auxi <- function(object, boot.se = NULL){
-  if (class(object) == "early_lucid"){
+  if (inherits(object, "early_lucid")){
     s1 <- object$select$selectG
     s2 <- object$select$selectZ
     nG <- sum(s1)
@@ -88,7 +88,7 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
     class(results) <- "sumlucid_early"
     return(results)
   }
-  if (class(object) == "lucid_parallel"){
+  if (inherits(object, "lucid_parallel")){
     ##not having regularity yet, to be added
     s1 <- object$select$selectG
     s2 <- object$select$selectZ
@@ -164,10 +164,10 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
 #' }
 
 print.sumlucid<- function(x, ...){
-  if (class(x) == "sumlucid_early" | class(x) == "sumlucid_parallel"){
+  if (inherits(x, "sumlucid_early") | inherits(x, "sumlucid_parallel")){
     print.sumlucid_auxi(x)
   }
-  else if (class(x) == "sumlucid_serial"){
+  else if (inherits(x, "sumlucid_serial")){
     sum_list = x$summary.list
     for (i in 1:length(sum_list)){
       if (i == 1){
@@ -188,7 +188,7 @@ print.sumlucid<- function(x, ...){
 
 
 print.sumlucid_auxi <- function(x, ...){
-  if(class(x) == "sumlucid_early"){
+  if(inherits(x, "sumlucid_early")){
   K <- x$K
   beta <- as.data.frame(x$beta)
   dim1 <- ncol(beta) - 1
@@ -222,7 +222,7 @@ print.sumlucid_auxi <- function(x, ...){
       }
     }
   }
-  if(class(x) == "sumlucid_parallel"){
+  if(inherits(x, "sumlucid_parallel")){
     K <- x$K
     #list of betas for each layer
     beta <- x$beta$Beta

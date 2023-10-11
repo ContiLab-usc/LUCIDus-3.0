@@ -52,7 +52,7 @@ plot_lucid <- function(x,
                        neg_link_color = "#d1e5eb",
                        fontsize = 7
 ) {
-  if (class(x) == "early_lucid"){
+  if (inherits(x,"early_lucid")){
   K <- x$K
   var.names <- x$var.names
   pars <- x$pars

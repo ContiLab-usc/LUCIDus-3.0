@@ -1,4 +1,5 @@
 
+
 Mstep_GtoX <- function(G, r, selectG, penalty, K, N) {
   nOmics <- length(K)
   dimG <- dim(G)

@@ -58,15 +58,19 @@
 #' Y_normal <- sim_data$Y_normal
 #'
 #' # find the optimal model over the grid of K
-#' tune_K <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+#' tune_K <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early",
+#'  useY = FALSE, tol = 1e-3,
 #' seed = 1, K = 2:5)
 #'
 #' # tune penalties
-#' tune_Rho_G <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+#' tune_Rho_G <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early",
+#'  useY = FALSE, tol = 1e-3,
 #' seed = 1, K = 2, Rho_G = c(0.1, 0.2, 0.3, 0.4))
-#' tune_Rho_Z_Mu <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+#' tune_Rho_Z_Mu <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", 
+#' useY = FALSE, tol = 1e-3,
 #' seed = 1, K = 2, Rho_Z_Mu = c(10, 20, 30, 40))
-#' tune_Rho_Z_Cov <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", useY = FALSE, tol = 1e-3,
+#' tune_Rho_Z_Cov <- tune_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", 
+#' useY = FALSE, tol = 1e-3,
 #' seed = 1, K = 2, Rho_Z_Cov = c(0.1, 0.2, 0.3))
 #'}
 #'

@@ -46,7 +46,10 @@
 #' of EM algorithm is printed in console. Default is FALSE.(to be done)
 #'
 #' @import mclust
-#'
+#' @import stats
+#' @import utils
+#' @import glasso
+#' @import glmnet
 #' @return A list contains the object below:
 #' 1. res_Beta: estimation for G->X associations
 #' 2. res_Mu_Sigma: estimation for X->Z associations

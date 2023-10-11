@@ -1,7 +1,7 @@
 ########Auxilary functions for printing the summary for LUCID in serial.############
 
 print.auxi.serial.scen1 <- function(x, ...){
-  if(class(x) == "sumlucid_early"){
+  if(inherits(x, "sumlucid_early")){
     K <- x$K
     beta <- as.data.frame(x$beta)
     dim1 <- ncol(beta) - 1
@@ -34,7 +34,7 @@ print.auxi.serial.scen1 <- function(x, ...){
       }
     }
   }
-  if(class(x) == "sumlucid_parallel"){
+  if(inherits(x, "sumlucid_parallel")){
     K <- x$K
     #list of betas for each layer
     beta <- x$beta$Beta
@@ -84,7 +84,7 @@ print.auxi.serial.scen1 <- function(x, ...){
 
 
 print.auxi.serial.scen2 <- function(x, ...){
-  if(class(x) == "sumlucid_early"){
+  if(inherits(x, "sumlucid_early")){
     K <- x$K
     delta <- as.data.frame(x$beta)
     dim1 <- ncol(delta) - 1
@@ -117,7 +117,7 @@ print.auxi.serial.scen2 <- function(x, ...){
       }
     }
   }
-  if(class(x) == "sumlucid_parallel"){
+  if(inherits(x, "sumlucid_parallel")){
     K <- x$K
     #list of deltas for each layer
     delta <- x$beta$Beta
@@ -167,7 +167,7 @@ print.auxi.serial.scen2 <- function(x, ...){
 
 
 print.auxi.serial.scen3 <- function(x, ...){
-  if(class(x) == "sumlucid_early"){
+  if(inherits(x, "sumlucid_early")){
     K <- x$K
     delta <- as.data.frame(x$beta)
     dim1 <- ncol(delta) - 1
@@ -204,7 +204,7 @@ print.auxi.serial.scen3 <- function(x, ...){
       }
     }
   }
-  if(class(x) == "sumlucid_parallel"){
+  if(inherits(x, "sumlucid_parallel")){
     K <- x$K
     #list of deltas for each layer
     delta <- x$beta$Beta
@@ -259,10 +259,10 @@ print.auxi.serial.scen3 <- function(x, ...){
 
 
 summary_lucid_simple <- function(object, boot.se = NULL){
-  if (class(object) == "early_lucid" | class(object) == "lucid_parallel"){
+  if (inherits(object, "early_lucid") | inherits(object, "lucid_parallel")){
     summary_lucid_auxi(object = object, boot.se = boot.se)
   }
-  else if (class(object) == "lucid_serial"){
+  else if (inherits(object, "lucid_serial")){
     K = object$K
     submodels = object$submodel
     n_submodels = length(submodels)

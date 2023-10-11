@@ -120,7 +120,7 @@ f_XtoY <- function(Y, Delta, family) {
     # if 1 omics layers
     if(length(K) == 1) {
       for(i in 1:K[1]) {
-        XtoY[i] <- dbinom(Y, size = 1, p = p[i], log = TRUE)
+        XtoY[i] <- dbinom(Y, size = 1, prob = p[i], log = TRUE)
         }
       }
 
@@ -129,7 +129,7 @@ f_XtoY <- function(Y, Delta, family) {
     if(length(K) == 2) {
       for(i in 1:K[1]) {
         for(j in 1:K[2]) {
-          XtoY[i, j, ] <- dbinom(Y, size = 1, p = p[i, j], log = TRUE)
+          XtoY[i, j, ] <- dbinom(Y, size = 1, prob = p[i, j], log = TRUE)
         }
       }
     }
@@ -139,7 +139,7 @@ f_XtoY <- function(Y, Delta, family) {
       for(i in 1:K[1]) {
         for(j in 1:K[2]) {
           for(k in 1:K[3]) {
-            XtoY[i, j, k, ] <- dbinom(Y, size = 1, p = p[i, j, k], log = TRUE)
+            XtoY[i, j, k, ] <- dbinom(Y, size = 1, prob = p[i, j, k], log = TRUE)
           }
         }
       }
@@ -151,7 +151,7 @@ f_XtoY <- function(Y, Delta, family) {
         for(j in 1:K[2]) {
           for(k in 1:K[3]) {
             for(l in 1:K[4]) {
-              XtoY[i, j, k, l, ] <- dbinom(Y, size = 1, p = p[i, j, k, l], log = TRUE)
+              XtoY[i, j, k, l, ] <- dbinom(Y, size = 1, prob = p[i, j, k, l], log = TRUE)
             }
           }
         }
@@ -165,7 +165,7 @@ f_XtoY <- function(Y, Delta, family) {
           for(k in 1:K[3]) {
             for(l in 1:K[4]) {
               for(m in 1:K[5]) {
-                XtoY[i, j, k, l, m, ] <- dbinom(Y, size = 1, p = p[i, j, k, l, m], log = TRUE)
+                XtoY[i, j, k, l, m, ] <- dbinom(Y, size = 1, prob = p[i, j, k, l, m], log = TRUE)
               }
             }
           }
