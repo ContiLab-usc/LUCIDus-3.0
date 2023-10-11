@@ -25,8 +25,6 @@
 #' if the element itself is a vector, model selection on K is performed;
 #' For lucid_model = "serial", a list, each element is either an integer or an list of integers, same length as Z,
 #' if the smallest element (integer) itself is a vector, model selection on K is performed
-#' @param init_omic.data.model a vector of strings specifies the geometric model of omics
-#' data. If NULL, See more in ?mclust::mclustModelNames
 #' @param Rho_G A scalar or a vector. This parameter is the LASSO penalty to regularize
 #' exposures. If it is a vector, \code{lucid} will call \code{tune_lucid} to conduct
 #' model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.

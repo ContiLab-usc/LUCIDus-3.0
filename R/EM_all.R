@@ -14,6 +14,7 @@
 #' data. If NULL, See more in ?mclust::mclustModelNames
 #' @param useY logical, if TRUE, EM algorithm fits a supervised LUCID; otherwise
 #' unsupervised LUCID.
+#' @param tol stopping criterion for the EM algorithm
 #' @param max_itr Maximum iterations of the EM algorithm. If the EM algorithm iterates
 #' more than max_itr without converging, the EM algorithm is forced to stop.
 #' @param max_tot.itr Max number of total iterations for \code{estimate_lucid} function.

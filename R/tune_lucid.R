@@ -24,6 +24,8 @@
 #' If K is given as a grid, the input of the grid of K differs for different
 #' LUCID models. i.e. For LUCID Early, K = 3:5; for LUCID in parallel, K = list(2:3, 2:3);
 #' for LUCID in serial, K = list(list(2:3,2),2:3)
+#' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
+#' "serial" for lucid in serial
 #' @param family Distribution of outcome. For continuous outcome, use "normal";
 #' for binary outcome, use "binary". Default is "normal".
 #' @param Rho_G A scalar or a vector. This parameter is the LASSO penalty to regularize

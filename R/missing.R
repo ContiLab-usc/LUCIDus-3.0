@@ -33,6 +33,8 @@ check_na <- function(Z){
 #' @param mu an M by K matrix representing cluster-specific means
 #' @param sigma an M by M by K array representing cluster-specific covariance
 #' @param index an N by M matrix representing missing values in Z
+#' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
+#' "serial" for lucid in serial
 #' @return a complete dataset of Z
 Istep_Z <- function(Z, p, mu, sigma, index, lucid_model){
   N <- nrow(Z)
@@ -51,7 +53,8 @@ Istep_Z <- function(Z, p, mu, sigma, index, lucid_model){
 #' @param p a vector of length K
 #' @param index a vector of length M, indicating whether a value is missing
 #' or not in the raw data
-#'
+#' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
+#' "serial" for lucid in serial
 #' @return an observation with updated imputed value
 #'
 fill_data <- function(obs, mu, sigma, p, index, lucid_model) {
