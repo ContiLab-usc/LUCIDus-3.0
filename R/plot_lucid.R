@@ -31,8 +31,8 @@
 #' cov <- sim_data$Covariate
 #'
 #' # plot lucid model
-#' fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early, CoY = NULL, family = "normal",
-#' K = 2, seed = 1008)
+#' fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", 
+#' CoY = NULL, family = "normal", K = 2, seed = 1008)
 #' plot_lucid(fit1)
 #'
 #' # change node color
@@ -41,8 +41,7 @@
 #'
 #' # change link color
 #' plot_lucid(fit1, pos_link_color = "red", neg_link_color = "green")
-#'}
-#'
+#' }
 plot_lucid <- function(x,
                        G_color = "dimgray",
                        X_color = "#eb8c30",

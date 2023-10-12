@@ -61,6 +61,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # LUCID early integration
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -80,10 +81,8 @@
 #' fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", K = 2:5)
 #'
 #' # variable selection
-#' fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", Rho_G = seq(0.01, 0.1, by = 0.01))
-#' fit7 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary",
-#' Rho_Z_Mu = seq(10, 100, by = 10), Rho_Z_Cov = 0.5,
-#' init_par = "random", verbose_tune = TRUE)
+#' fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, 
+#' family = "binary", Rho_G = seq(0.01, 0.1, by = 0.01))
 #' 
 #' # LUCID in parallel
 #' i <- 1008
@@ -107,9 +106,7 @@
 #' family = "normal", init_omic.data.model = "VVV",
 #' seed = i, init_impute = "mix", init_par = "mclust",
 #' useY = TRUE)
-
-
-
+#' }
 lucid <- function(G,
                   Z,
                   Y,

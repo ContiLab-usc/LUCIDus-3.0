@@ -42,3 +42,25 @@ color of the node represents variable type, either exposure, omics or outcome.
 The width of the line represents the effect size of a certain association; the
 color of the line represents the direction of a certain association. Only work for LUCID early for now.
 }
+\examples{
+\dontrun{
+# prepare data
+G <- sim_data$G
+Z <- sim_data$Z
+Y_normal <- sim_data$Y_normal
+Y_binary <- sim_data$Y_binary
+cov <- sim_data$Covariate
+
+# plot lucid model
+fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", 
+CoY = NULL, family = "normal", K = 2, seed = 1008)
+plot_lucid(fit1)
+
+# change node color
+plot_lucid(fit1, G_color = "yellow")
+plot_lucid(fit1, Z_color = "red")
+
+# change link color
+plot_lucid(fit1, pos_link_color = "red", neg_link_color = "green")
+}
+}

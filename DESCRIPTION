@@ -1,5 +1,5 @@
 Package: LUCIDus
-Title: LUCID with Multi-omics Data
+Title: LUCID with Multi-Omics Data
 Version: 3.0.1
 Authors@R: c(
     person("Qiran", "Jia", , "qiranjia@usc.edu", role = c("aut", "cre"),

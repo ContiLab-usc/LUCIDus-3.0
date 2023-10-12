@@ -97,3 +97,51 @@ An optimal LUCID model
 \description{
 Fit a lucid model for integrated analysis on exposure, outcome and multi-omics data, allowing for tuning
 }
+\examples{
+\dontrun{
+# LUCID early integration
+G <- sim_data$G
+Z <- sim_data$Z
+Y_normal <- sim_data$Y_normal
+Y_binary <- sim_data$Y_binary
+cov <- sim_data$Covariate
+
+# fit lucid model
+fit1 <- lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early, family = "normal")
+fit2 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", useY = FALSE)
+
+# including covariates
+fit3 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoG = cov)
+fit4 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoY = cov)
+
+# tune K
+fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", K = 2:5)
+
+# variable selection
+fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, 
+family = "binary", Rho_G = seq(0.01, 0.1, by = 0.01))
+
+# LUCID in parallel
+i <- 1008
+set.seed(i)
+G <- matrix(rnorm(500), nrow = 100)
+Z1 <- matrix(rnorm(1000),nrow = 100)
+Z2 <- matrix(rnorm(1000), nrow = 100)
+Z <- list(Z1 = Z1, Z2 = Z2)
+CoY <- matrix(rnorm(200), nrow = 100)
+CoG <- matrix(rnorm(200), nrow = 100)
+Y <- rnorm(100)
+best_parallel <- lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
+CoG = CoG, CoY = CoY, lucid_model = "parallel",
+family = "normal", init_omic.data.model = "VVV",
+seed = i, init_impute = "mix", init_par = "mclust",
+useY = TRUE)
+
+# LUCID in serial
+best_serial <- lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
+CoG = CoG, CoY = CoY, lucid_model = "serial",
+family = "normal", init_omic.data.model = "VVV",
+seed = i, init_impute = "mix", init_par = "mclust",
+useY = TRUE)
+}
+}

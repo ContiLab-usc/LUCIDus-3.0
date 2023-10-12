@@ -52,8 +52,8 @@
 #' seed = 1008)
 #'
 #' # conduct bootstrap resampling
-#' boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early",model = fit1,
-#'  R = 100)
+#' boot1 <- boot_lucid(G = G, Z = Z, Y = Y_normal, 
+#' lucid_model = "early",model = fit1, R = 100)
 #'
 #' # check distribution for bootstrap replicates of the variable of interest
 #' plot(boot1$bootstrap, 1)
