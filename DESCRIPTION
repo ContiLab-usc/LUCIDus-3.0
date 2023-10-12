@@ -6,17 +6,16 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-0790-5967")),
     person(given = "Yinqi", family = "Zhao", 
            email = "yinqiz@usc.edu", 
-           role = "ctb",
+           role = "aut",
            comment = c(ORCID = "0000-0003-2413-732X")),
     person(given = "David", family = "Conti", 
            email = "dconti@usc.med.edu", role = "ths",
            comment = c(ORCID = "0000-0002-2941-7833")),
     person(given = "Jesse", family = "Goodrich", 
            role = "ctb",
-           comment = c(ORCID = "0000-0001-6615-0472")),
-    person(given = "Cheng", family = "Peng", role = "ctb")
+           comment = c(ORCID = "0000-0001-6615-0472"))
   )
-Description: LUCID version 3, a major update and enhancement from the last version, is more robust, and features more powerful model selection, model visualization, inference based on bootstrap resampling, and implements different integration strategies for analyzing multi-omics data including LUCID early integration, LUCID in parallel, and LUCID in serial. It also incorporates methods to deal with missingness in multi-omics data.
+Description: LUCIDus Version 3.0.1, a major update and enhancement from the last version while conserving all the previous features, implements three different integration strategies for multi-omics data analysis within the LUCID framework. It introduces three types of LUCID models: LUCID early integration (the original LUCID model), LUCID in parallel, and LUCID in serial. Automated model selection for each LUCID model is available to obtain the optimal number of latent clusters, and an integrated imputation approach is implemented to handle sporadic and list-wise missing multi-omics data.
 Depends: R (>= 3.6.0) 
 License: MIT + file LICENSE
 Encoding: UTF-8

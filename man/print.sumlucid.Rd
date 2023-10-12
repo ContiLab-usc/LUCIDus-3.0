@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{An object returned by \code{summary_lucid}}
 
-\item{...}{Other parameters to be passed to \code{print}}
+\item{...}{Other parameters to be passed to \code{print.sumlucid}}
 }
 \description{
 Print the output of LUCID in a nicer table

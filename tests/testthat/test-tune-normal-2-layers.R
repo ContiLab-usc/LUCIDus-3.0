@@ -21,7 +21,7 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2)", {
                                               init_omic.data.model = "VVV",
                                               seed = i,
                                               init_impute = "mix",
-                                              init_par = "regression",
+                                              init_par = "mclust",
                                               useY = TRUE)))
   invisible(capture.output(best1 <- lucid(G = G, Z = Z2, Y = Y, K = 2:4,
                                                     CoG = CoG, CoY = CoY,
@@ -30,7 +30,7 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2)", {
                                                     init_omic.data.model = "VVV",
                                                     seed = i,
                                                     init_impute = "mix",
-                                                    init_par = "regression",
+                                                    init_par = "mclust",
                                                     useY = TRUE)))
 
   invisible(capture.output(tune_list2 <- tune_lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
@@ -40,16 +40,16 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2)", {
                                                   init_omic.data.model = "VVV",
                                                   seed = i,
                                                   init_impute = "mix",
-                                                  init_par = "regression",
+                                                  init_par = "mclust",
                                                   useY = TRUE)))
   invisible(capture.output(best2 <- lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
                                                     CoG = CoG, CoY = CoY,
-                                                    lucid_model = "parallel",
+                                                    lucid_model = "serial",
                                                     family = "normal",
                                                     init_omic.data.model = "VVV",
                                                     seed = i,
                                                     init_impute = "mix",
-                                                    init_par = "regression",
+                                                    init_par = "mclust",
                                                     useY = TRUE)))
 
 })

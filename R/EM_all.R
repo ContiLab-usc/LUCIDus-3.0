@@ -52,13 +52,23 @@
 #' @import glmnet
 #' @return A list contains the object below:
 #' 1. res_Beta: estimation for G->X associations
-#' 2. res_Mu_Sigma: estimation for X->Z associations
-#' 3. res_Gamma: estimation for X->Y associations
-#' 4. loglik: log likelihood of LUCID model
+#' 2. res_Mu: estimation for the mu of the X->Z associations
+#' 3. res_Sigma: estimation for the sigma of the X->Z associations
+#' 4. res_Gamma: estimation for X->Y associations
 #' 5. inclusion.p: inclusion probability of cluster assignment for each observation
 #' 6. K: umber of latent clusters for "early"/list of numbers of latent clusters for "parallel" and "serial"
-#' 7. N: number of observations
-#'
+#' 7. var.names: names for the G, Z, Y variables
+#' 8. init_omic.data.model: pre-specified geometric model of multi-omics data
+#' 9. likelihood: converged LUCID model log likelihood
+#' 10. family: the distribution of the outcome
+#' 11. select: for LUCID early integration only, indicators of whether each exposure and omics feature is selected 
+#' 12. useY: whether this LUCID model is supervised
+#' 13. Z: multi-omics data
+#' 14. init_impute: pre-specified imputation method
+#' 15. init_par: pre-specified parameter initialization method
+#' 16. Rho: for LUCID early integration only, pre-specified regularity tuning parameter 
+#' 17. N: number of observations
+#' 18. submodel: for LUCID in serial only, storing all the submodels
 #' @examples
 #' \dontrun{
 #' i <- 1008

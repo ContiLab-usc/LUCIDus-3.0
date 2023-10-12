@@ -39,10 +39,29 @@
 #' @param verbose_tune A flag to print details of tuning process.
 #' @param ... Other parameters passed to \code{estimate_lucid}
 #'
-#' @return An optimal lucid model
+#' @return An optimal LUCID model
+#' 1. res_Beta: estimation for G->X associations
+#' 2. res_Mu: estimation for the mu of the X->Z associations
+#' 3. res_Sigma: estimation for the sigma of the X->Z associations
+#' 4. res_Gamma: estimation for X->Y associations
+#' 5. inclusion.p: inclusion probability of cluster assignment for each observation
+#' 6. K: umber of latent clusters for "early"/list of numbers of latent clusters for "parallel" and "serial"
+#' 7. var.names: names for the G, Z, Y variables
+#' 8. init_omic.data.model: pre-specified geometric model of multi-omics data
+#' 9. likelihood: converged LUCID model log likelihood
+#' 10. family: the distribution of the outcome
+#' 11. select: for LUCID early integration only, indicators of whether each exposure and omics feature is selected 
+#' 12. useY: whether this LUCID model is supervised
+#' 13. Z: multi-omics data
+#' 14. init_impute: pre-specified imputation method
+#' 15. init_par: pre-specified parameter initialization method
+#' 16. Rho: for LUCID early integration only, pre-specified regularity tuning parameter 
+#' 17. N: number of observations
+#' 18. submodel: for LUCID in serial only, storing all the submodels
 #' @export
 #'
 #' @examples
+#' # LUCID early integration
 #' G <- sim_data$G
 #' Z <- sim_data$Z
 #' Y_normal <- sim_data$Y_normal
@@ -65,9 +84,29 @@
 #' fit7 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary",
 #' Rho_Z_Mu = seq(10, 100, by = 10), Rho_Z_Cov = 0.5,
 #' init_par = "random", verbose_tune = TRUE)
-#'
-
-
+#' 
+#' # LUCID in parallel
+#' i <- 1008
+#' set.seed(i)
+#' G <- matrix(rnorm(500), nrow = 100)
+#' Z1 <- matrix(rnorm(1000),nrow = 100)
+#' Z2 <- matrix(rnorm(1000), nrow = 100)
+#' Z <- list(Z1 = Z1, Z2 = Z2)
+#' CoY <- matrix(rnorm(200), nrow = 100)
+#' CoG <- matrix(rnorm(200), nrow = 100)
+#' Y <- rnorm(100)
+#' best_parallel <- lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
+#' CoG = CoG, CoY = CoY, lucid_model = "parallel",
+#' family = "normal", init_omic.data.model = "VVV",
+#' seed = i, init_impute = "mix", init_par = "mclust",
+#' useY = TRUE)
+#' 
+#' # LUCID in serial
+#' best_serial <- lucid(G = G, Z = Z, Y = Y, K = list(2:4,2),
+#' CoG = CoG, CoY = CoY, lucid_model = "serial",
+#' family = "normal", init_omic.data.model = "VVV",
+#' seed = i, init_impute = "mix", init_par = "mclust",
+#' useY = TRUE)
 
 
 

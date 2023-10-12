@@ -136,12 +136,12 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
   }
 }
 
-
-#' Print the output of LUCID in a nicer table
+#' @title Print the output of LUCID in a nicer table
 #'
 #' @param x An object returned by \code{summary_lucid}
-#' @param ... Other parameters to be passed to \code{print}
-#' @export
+#' @param ... Other parameters to be passed to \code{print.sumlucid}
+#' @export print.sumlucid
+#' @export 
 #' @examples
 #' \dontrun{
 #' # use simulated data
