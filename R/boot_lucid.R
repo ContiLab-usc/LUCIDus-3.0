@@ -3,7 +3,7 @@
 #' @description Generate \code{R} bootstrap replicates of LUCID parameters and
 #' derive confidence interval (CI) base on bootstrap. Bootstrap replicates are
 #' generated based on nonparameteric resampling, implemented by \code{ordinary}
-#' method of code{boot::boot} function. Now only achieved for LUCID early integration.
+#' method of \code{boot::boot} function. Now only achieved for LUCID early integration.
 #'
 #' @param G Exposures, a numeric vector, matrix, or data frame. Categorical variable
 #' should be transformed into dummy variables. If a matrix or data frame, rows

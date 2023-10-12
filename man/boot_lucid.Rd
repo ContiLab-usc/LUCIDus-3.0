@@ -59,7 +59,7 @@ outcome}
 Generate \code{R} bootstrap replicates of LUCID parameters and
 derive confidence interval (CI) base on bootstrap. Bootstrap replicates are
 generated based on nonparameteric resampling, implemented by \code{ordinary}
-method of code{boot::boot} function. Now only achieved for LUCID early integration.
+method of \code{boot::boot} function. Now only achieved for LUCID early integration.
 }
 \examples{
 \dontrun{
