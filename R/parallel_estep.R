@@ -346,16 +346,3 @@ Estep_to_r <- function(Estep_array, K, N) {
 
   return(Estep_array)
 }
-
-#individual inclusion prob for each LC of each layer
-compute_res_r <- function(r, N, layer) {
-  r_margin <- t(sapply(1:N, function(j) {
-    marginSums(lastInd(r,j), margin = layer)
-  }))
-  res.r <- t(apply(r_margin, 1, lse_vec))
-}
-
-
-cal_loglik <- function(Estep_array, Estep_r) {
-  return(sum(Estep_array * Estep_r))
-}

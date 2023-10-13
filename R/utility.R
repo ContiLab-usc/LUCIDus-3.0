@@ -1,6 +1,19 @@
 
 ####################utility functions for the EM algorithm of LUCID in parallel####################
 
+#individual inclusion prob for each LC of each layer
+compute_res_r <- function(r, N, layer) {
+  r_margin <- t(sapply(1:N, function(j) {
+    marginSums(lastInd(r,j), margin = layer)
+  }))
+  return(r_margin)
+}
+
+
+cal_loglik <- function(Estep_array, Estep_r) {
+  return(sum(Estep_array * Estep_r))
+}
+
 LogSumExp <- function(vec) {
   max_vec <- max(vec)
   trick <- max_vec + log(sum(exp(vec - max_vec)))
