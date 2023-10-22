@@ -19,9 +19,9 @@
 #' Categorical variable should be transformed into dummy variables.
 #' @param family Distribution of outcome. For continuous outcome, use "normal";
 #' for binary outcome, use "binary". Default is "normal".
-#' @param K Number of latent clusters. For lucid_model = "early", number of latent clusters (should be greater or equal than 2).
+#' @param K Number of latent clusters to be tuned. For lucid_model = "early", number of latent clusters (should be greater or equal than 2).
 #' Either an integer or a vector of integer. If K is a vector, model selection
-#' on K is performed. For lucid_model = "parallel",an integer vector, same length as Z, 
+#' on K is performed. For lucid_model = "parallel",a list with vectors of integers or just integers, same length as Z, 
 #' if the element itself is a vector, model selection on K is performed;
 #' For lucid_model = "serial", a list, each element is either an integer or an list of integers, same length as Z,
 #' if the smallest element (integer) itself is a vector, model selection on K is performed
@@ -288,6 +288,10 @@ lucid <- function(G,
 
   }else if (match.arg(lucid_model) == "parallel"){
     ###LUCID in parallel#######
+    if(!is.list(K)) {
+      stop("For using lucid() for LUCID in parallel, K should be a list!")
+    } 
+    
     if (length(Rho_G) > 1 | length(Rho_Z_Mu) > 1 | length(Rho_Z_Cov) > 1){
       stop("Tune LUCID in parallel can't tune for regualrities for now!")
     }
@@ -336,7 +340,10 @@ lucid <- function(G,
 
   }else if (match.arg(lucid_model) == "serial"){
     ######LUCID in serial######
-
+    if(!is.list(K)) {
+      stop("For using lucid() for LUCID in serial, K should be a list!")
+    } 
+    
     if (length(Rho_G) > 1 | length(Rho_Z_Mu) > 1 | length(Rho_Z_Cov) > 1){
       stop("Tune LUCID in serial can't tune for regualrities for now!")
     }

@@ -19,7 +19,7 @@
 #' @param CoY Optional, covariates to be adjusted for estimating the association
 #' between latent cluster and the outcome. A numeric vector, matrix or data frame.
 #' Categorical variable should be transformed into dummy variables.
-#' @param K Number of latent clusters. If "early", an integer;If "parallel",an integer vector, same length as Z;
+#' @param K Number of latent clusters. If "early", an integer;If "parallel",a list, each element is an integer/integer vector, same length as Z;
 #' If "serial", a list, each element is either an integer or an list of integers, same length as Z.
 #' If K is given as a grid, the input of the grid of K differs for different
 #' LUCID models. i.e. For LUCID Early, K = 3:5; for LUCID in parallel, K = list(2:3, 2:3);

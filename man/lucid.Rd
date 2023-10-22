@@ -43,9 +43,9 @@ Categorical variable should be transformed into dummy variables.}
 \item{family}{Distribution of outcome. For continuous outcome, use "normal";
 for binary outcome, use "binary". Default is "normal".}
 
-\item{K}{Number of latent clusters. For lucid_model = "early", number of latent clusters (should be greater or equal than 2).
+\item{K}{Number of latent clusters to be tuned. For lucid_model = "early", number of latent clusters (should be greater or equal than 2).
 Either an integer or a vector of integer. If K is a vector, model selection
-on K is performed. For lucid_model = "parallel",an integer vector, same length as Z,
+on K is performed. For lucid_model = "parallel",a list with vectors of integers or just integers, same length as Z,
 if the element itself is a vector, model selection on K is performed;
 For lucid_model = "serial", a list, each element is either an integer or an list of integers, same length as Z,
 if the smallest element (integer) itself is a vector, model selection on K is performed}
