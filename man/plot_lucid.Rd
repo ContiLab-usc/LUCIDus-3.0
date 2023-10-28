@@ -43,7 +43,6 @@ The width of the line represents the effect size of a certain association; the
 color of the line represents the direction of a certain association. Only work for LUCID early for now.
 }
 \examples{
-\dontrun{
 # prepare data
 G <- sim_data$G
 Z <- sim_data$Z
@@ -62,5 +61,4 @@ plot_lucid(fit1, Z_color = "red")
 
 # change link color
 plot_lucid(fit1, pos_link_color = "red", neg_link_color = "green")
-}
 }

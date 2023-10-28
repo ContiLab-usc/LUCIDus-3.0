@@ -18,11 +18,16 @@
 #' Categorical variable should be transformed into dummy variables.
 #' @param response If TRUE, when predicting binary outcome, the response will be
 #' returned. If FALSE, the linear predictor is returned.
-#' @return A list contains predicted latent cluster, inclusion probability and outcome for each observation
+#' @param verbose A flag indicates whether detailed information
+#' is printed in console. Default is FALSE.
+#' @return A list containing the following components:
+#' 1. inclusion.p: A list of inclusion probabilities for each sub-model in the LUCID model.
+#' 2. pred.x: A list of predicted values for the data matrix G.
+#' 3. pred.y: Predicted values for the response variable Y (if response is TRUE).
+
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # prepare data
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -34,7 +39,7 @@
 #' # prediction on training set
 #' pred1 <- predict_lucid(model = fit1, G = G, Z = Z, Y = Y_normal, lucid_model = "early")
 #' pred2 <- predict_lucid(model = fit1, G = G, Z = Z, lucid_model = "early")
-#' }
+#' 
 
 
 predict_lucid <- function(model,
@@ -44,7 +49,8 @@ predict_lucid <- function(model,
                           Y = NULL,
                           CoG = NULL,
                           CoY = NULL,
-                          response = TRUE){
+                          response = TRUE,
+                          verbose = FALSE){
 
   if (match.arg(lucid_model) == "early" | match.arg(lucid_model) == "parallel"){
     # ========================== Early Integration ==========================
@@ -88,9 +94,11 @@ predict_lucid <- function(model,
 
     #loop through each K
     for (i in 1:length(K)){
-      cat("Predicting LUCID in Serial model",
-          paste0("(", "Sub Model Number = ", i, ")"),
-          "\n")
+      if(verbose){
+        cat("Predicting LUCID in Serial model",
+            paste0("(", "Sub Model Number = ", i, ")"),
+            "\n")
+      }
       ##Scenario 1: the first serial sub model
       if (i == 1){
         if (is.numeric(K[[1]])){

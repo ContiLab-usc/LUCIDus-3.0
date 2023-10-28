@@ -23,6 +23,18 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2)", {
                                                   init_impute = "mix",
                                                   init_par = "mclust",
                                                   useY = TRUE)))
+  
+  
+  invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), CoG = CoG, CoY = CoY,
+                                                  lucid_model = "parallel",
+                                                  family = "normal",
+                                                  init_omic.data.model  = "VVV",
+                                                  seed = i,
+                                                  init_impute = "mix",
+                                                  init_par = "mclust",
+                                                  verbose = TRUE,
+                                                  useY = TRUE)))
+  
   betas <- fit1$res_Beta$Beta
   beta1 <- mean(unlist(betas[1]))
   beta2 <- mean(unlist(betas[2]))

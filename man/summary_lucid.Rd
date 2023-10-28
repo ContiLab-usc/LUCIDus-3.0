@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary_lucid}
 \alias{summary_lucid}
-\title{Summarize results of LUCID model}
+\title{Summarize results of the LUCID model}
 \usage{
 summary_lucid(object, boot.se = NULL)
 }
@@ -12,11 +12,14 @@ summary_lucid(object, boot.se = NULL)
 \item{boot.se}{An object returned by \code{\link{boot_lucid}},
 which contains the bootstrap confidence intervals}
 }
+\value{
+A list, containing the extracted key parameters from the LUCID model that can be used to print the summary table
+}
 \description{
-Summarize results of LUCID model
+Summarize results of the LUCID model
 }
 \examples{
-\dontrun{
+\donttest{
 # use simulated data
 G <- sim_data$G
 Z <- sim_data$Z

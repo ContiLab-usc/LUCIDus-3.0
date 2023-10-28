@@ -22,7 +22,6 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # prepare data
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -41,7 +40,7 @@
 #'
 #' # change link color
 #' plot_lucid(fit1, pos_link_color = "red", neg_link_color = "green")
-#' }
+
 plot_lucid <- function(x,
                        G_color = "dimgray",
                        X_color = "#eb8c30",

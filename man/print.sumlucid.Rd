@@ -11,11 +11,14 @@
 
 \item{...}{Other parameters to be passed to \code{print.sumlucid}}
 }
+\value{
+A nice table/several nice tables of the summary of the LUCID model
+}
 \description{
 Print the output of LUCID in a nicer table
 }
 \examples{
-\dontrun{
+\donttest{
 # use simulated data
 G <- sim_data$G
 Z <- sim_data$Z

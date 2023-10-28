@@ -13,7 +13,8 @@ boot_lucid(
   CoY = NULL,
   model,
   conf = 0.95,
-  R = 100
+  R = 100,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ of the required interval(s).}
 
 \item{R}{An integer to specify number of bootstrap replicates for LUCID model.
 If feasible, it is recommended to set R >= 1000.}
+
+\item{verbose}{A flag indicates whether detailed information
+is printed in console. Default is FALSE.}
 }
 \value{
 A list, containing the following components:
@@ -62,7 +66,7 @@ generated based on nonparameteric resampling, implemented by \code{ordinary}
 method of \code{boot::boot} function. Now only achieved for LUCID early integration.
 }
 \examples{
-\dontrun{
+\donttest{
 # use simulated data
 G <- sim_data$G
 Z <- sim_data$Z

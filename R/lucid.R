@@ -61,7 +61,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # LUCID early integration
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -70,18 +70,18 @@
 #' cov <- sim_data$Covariate
 #'
 #' # fit lucid model
-#' fit1 <- lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early, family = "normal")
-#' fit2 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", useY = FALSE)
+#' fit1 <- lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal")
+#' fit2 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", useY = FALSE)
 #'
 #' # including covariates
-#' fit3 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoG = cov)
-#' fit4 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoY = cov)
+#' fit3 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", CoG = cov)
+#' fit4 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", CoY = cov)
 #'
 #' # tune K
-#' fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", K = 2:5)
+#' fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", K = 2:3)
 #'
 #' # variable selection
-#' fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, 
+#' fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", 
 #' family = "binary", Rho_G = seq(0.01, 0.1, by = 0.01))
 #' 
 #' # LUCID in parallel
@@ -241,13 +241,12 @@ lucid <- function(G,
   if(verbose_tune) {
     res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                            family = family, K = K, lucid_model = "early",
-                           Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                           Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov, verbose_tune = TRUE,
                            ...)
   } else {
-    cat("Fitting LUCID Early Integration model \n \n")
     invisible(capture.output(res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                                                     family = family, K = K, lucid_model = "early",
-                                                    Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                                                    Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov, verbose_tune = FALSE,
                                                     ...)))
   }
 
@@ -257,22 +256,30 @@ lucid <- function(G,
   select_G <- best_model$select$selectG
   if(flag_select_G) {
     if(sum(select_G) == 0) {
-      cat("No exposure variables is selected using the given penalty Rho_G, please try a smaller one \n \n")
-      cat("LUCID model will be fitted without variable selection on exposures (G) \n \n")
+      if(verbose_tune){
+        cat("No exposure variables is selected using the given penalty Rho_G, please try a smaller one \n \n")
+        cat("LUCID model will be fitted without variable selection on exposures (G) \n \n")
+      }
       select_G <- rep(TRUE, length(select_G))
     } else {
-      cat(paste0(sum(select_G), "/", length(select_G)), "exposures are selected \n \n")
+      if(verbose_tune){
+        cat(paste0(sum(select_G), "/", length(select_G)), "exposures are selected \n \n")
+      }
     }
   }
 
   select_Z <- best_model$select$selectZ
   if(flag_select_Z) {
     if(sum(select_Z) == 0) {
-      cat("No omics variables is selected using the given penalty Rho_Z_Mu and Rho_Z_Cov, please try smaller ones \n \n")
-      cat("LUCID model will be fitted without variable selection on omics data (Z) \n \n")
+      if(verbose_tune){
+        cat("No omics variables is selected using the given penalty Rho_Z_Mu and Rho_Z_Cov, please try smaller ones \n \n")
+        cat("LUCID model will be fitted without variable selection on omics data (Z) \n \n")
+      }
       select_Z <- rep(TRUE, length(select_Z))
     } else {
-      cat(paste0(sum(select_Z), "/", length(select_Z)), "omics variables are selected \n \n")
+      if(verbose_tune){
+        cat(paste0(sum(select_Z), "/", length(select_Z)), "omics variables are selected \n \n")
+      }
 
     }
   }
@@ -282,8 +289,10 @@ lucid <- function(G,
                                                      CoG = CoG, CoY = CoY, family = family,
                                                      K = K, ...)))
   }
-
-  cat("The best LUCID Early Integration model among all the candidate models is extracted!  \n \n")
+  
+  if(verbose_tune){
+    cat("The best LUCID Early Integration model among all the candidate models is extracted!  \n \n")
+  }
   return(best_model)
 
   }else if (match.arg(lucid_model) == "parallel"){
@@ -324,18 +333,20 @@ lucid <- function(G,
     if(verbose_tune) {
       res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                              family = family, K = K, lucid_model = "parallel",
-                             Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                             Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,verbose_tune = TRUE,
                              ...)
     } else {
-      cat("Fitting LUCID in Parallel model \n \n")
+
       invisible(capture.output(res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                                                       family = family, K = K, lucid_model = "parallel",
-                                                      Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                                                      Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,verbose_tune = FALSE,
                                                       ...)))
     }
 
     best_model <- res_tune$model_opt
-    cat("The best LUCID in Parallel model among all the candidate models is extracted!  \n \n")
+    if(verbose_tune){
+      cat("The best LUCID in Parallel model among all the candidate models is extracted!  \n \n")
+    }
     return(best_model)
 
   }else if (match.arg(lucid_model) == "serial"){
@@ -380,18 +391,20 @@ lucid <- function(G,
     if(verbose_tune) {
       res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                              family = family, K = K, lucid_model = "serial",
-                             Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                             Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov, verbose_tune = TRUE,
                              ...)
     } else {
-      cat("Fitting LUCID in Serial model \n \n")
+
       invisible(capture.output(res_tune <- tune_lucid(G = G, Z = Z, Y = Y, CoG = CoG, CoY = CoY,
                                                       family = family, K = K, lucid_model = "serial",
-                                                      Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov,
+                                                      Rho_G = Rho_G, Rho_Z_Mu = Rho_Z_Mu, Rho_Z_Cov = Rho_Z_Cov, verbose_tune = FALSE,
                                                       ...)))
     }
 
     best_model <- res_tune$model_opt
-    cat("The best LUCID in Serial model among all the candidate models is extracted!  \n \n")
+    if(verbose_tune){
+      cat("The best LUCID in Serial model among all the candidate models is extracted!  \n \n")
+    }
     return(best_model)
 
   }

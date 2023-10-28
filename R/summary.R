@@ -1,12 +1,12 @@
-#' @title Summarize results of LUCID model
+#' @title Summarize results of the LUCID model
 #'
 #' @param object A LUCID model fitted by \code{\link{estimate_lucid}}
 #' @param boot.se An object returned by \code{\link{boot_lucid}},
 #' which contains the bootstrap confidence intervals
-#'
+#' @return A list, containing the extracted key parameters from the LUCID model that can be used to print the summary table
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # use simulated data
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -140,10 +140,11 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
 #'
 #' @param x An object returned by \code{summary_lucid}
 #' @param ... Other parameters to be passed to \code{print.sumlucid}
+#' @return A nice table/several nice tables of the summary of the LUCID model
 #' @export print.sumlucid
 #' @export 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # use simulated data
 #' G <- sim_data$G
 #' Z <- sim_data$Z

@@ -26,7 +26,9 @@
 #' of the required interval(s).
 #' @param R An integer to specify number of bootstrap replicates for LUCID model.
 #' If feasible, it is recommended to set R >= 1000.
-#'
+#' @param verbose A flag indicates whether detailed information
+#' is printed in console. Default is FALSE.
+#' 
 #' @return A list, containing the following components:
 #' \item{beta}{effect estimate for each exposure}
 #' \item{mu}{cluster-specific mean for each omics feature}
@@ -40,7 +42,7 @@
 #' @import progress
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # use simulated data
 #' G <- sim_data$G
 #' Z <- sim_data$Z
@@ -70,7 +72,8 @@ boot_lucid <- function(G,
                        CoY = NULL,
                        model,
                        conf = 0.95,
-                       R = 100) {
+                       R = 100,
+                       verbose = FALSE) {
   # prepare data for bootstrap (boot function require data in a matrix form,
   # list data structure doesn't work)
   if(!is.null(model$selectG) | !is.null(model$selectZ)) {
@@ -90,7 +93,9 @@ boot_lucid <- function(G,
     alldata <- as.data.frame(cbind(G, Z, Y, CoG, CoY))
 
     # bootstrap
-    cat(paste0("Use Bootstrap resampling to derive ", 100 * conf, "% CI for LUCID \n"))
+    if(verbose){
+      cat(paste0("Use Bootstrap resampling to derive ", 100 * conf, "% CI for LUCID \n"))
+    }
     #initialize progress bar object
     pb <- progress::progress_bar$new(total = R + 1)
     bootstrap <- boot(data = alldata,

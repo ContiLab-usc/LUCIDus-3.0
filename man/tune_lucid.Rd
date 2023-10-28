@@ -16,6 +16,7 @@ tune_lucid(
   Rho_G = 0,
   Rho_Z_Mu = 0,
   Rho_Z_Cov = 0,
+  verbose_tune = FALSE,
   ...
 )
 }
@@ -63,6 +64,8 @@ variable selection. User can try penalties from 1 to 100. Work for LUCID early o
 penalty to estimate sparse cluster-specific variance-covariance matrices for omics
 data (Z). If it is a vector, \code{tune_lucid} will conduct
 model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.}
+
+\item{verbose_tune}{A flag to print details of tuning process.}
 
 \item{...}{Other parameters passed to \code{estimate_lucid}}
 }

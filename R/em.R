@@ -152,12 +152,16 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
     if(na_pattern$impute_flag) {
       # initialize imputation
       if(init_impute == "mix") {
-        cat("Intializing imputation of missing values in 'Z' via the mix package \n\n")
+        if(verbose){
+          cat("Intializing imputation of missing values in 'Z' via the mix package \n\n")
+        }
         invisible(capture.output(Z <- mclust::imputeData(Z, seed = seed)))
         Z[na_pattern$indicator_na == 3, ] <- NA
       }
       if(init_impute == "lod") {
-        cat("Intializing imputation of missing values in 'Z' via LOD / sqrt(2) \n\n")
+        if(verbose){
+          cat("Intializing imputation of missing values in 'Z' via LOD / sqrt(2) \n\n")
+        }
         Z <- apply(Z, 2, fill_data_lod)
         colnames(Z) <- Znames
       }
@@ -183,7 +187,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
       # initialize mu and sigma
       # initialize by mclust
       if(init_par == "mclust") {
-        cat("Initialize LUCID with mclust based on inclusion probabilities given by mclust \n")
+        if(verbose){
+          cat("Initialize LUCID with mclust based on inclusion probabilities given by mclust \n")
+        }
         invisible(capture.output(mclust.fit <- Mclust(Z[na_pattern$indicator_na != 3, ],
                                                       G = K,
                                                       modelNames = init_omic.data.model)))
@@ -200,10 +206,14 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
         # browser()
 
       } else { # initialize by random guess
-        cat("Initialize LUCID with random values from uniform distribution \n")
+        if(verbose){
+          cat("Initialize LUCID with random values from uniform distribution \n")
+        }
         if(is.null(init_omic.data.model)){
           model.best <- "EEV"
-          cat("GMM model for LUCID is not specified, 'EEV' model is used by default \n")
+          if(verbose){
+            cat("GMM model for LUCID is not specified, 'EEV' model is used by default \n")
+          }
         } else{
           model.best <- init_omic.data.model
         }
@@ -218,9 +228,11 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
 
 
       # start EM algorithm
-      cat("Fitting Early Integration LUCID model",
-          paste0("(", "K = ", K, ", Rho_G = ", Rho_G, ", Rho_Z_Mu = ", Rho_Z_Mu, ", Rho_Z_Cov = ", Rho_Z_Cov, ")"),
-          "\n")
+      if(verbose){
+        cat("Fitting Early Integration LUCID model",
+            paste0("(", "K = ", K, ", Rho_G = ", Rho_G, ", Rho_Z_Mu = ", Rho_Z_Mu, ", Rho_Z_Cov = ", Rho_Z_Cov, ")"),
+            "\n")
+      }
       res.loglik <- -Inf
       itr <- 0
       while(!convergence && itr <= max_itr){
@@ -249,7 +261,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
         res.r <- t(apply(new.likelihood, 1, lse_vec))
 
         if(!all(is.finite(res.r))){
-          cat("iteration", itr,": EM algorithm collapsed: invalid estiamtes due to over/underflow, try LUCID with another seed \n")
+          if(verbose){
+            cat("iteration", itr,": EM algorithm collapsed: invalid estiamtes due to over/underflow, try LUCID with another seed \n")
+          }
           break
         } else{
           if(isTRUE(verbose)) {
@@ -277,7 +291,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
                                 ind.na = na_pattern$indicator_na,
                                 mu = res.mu)
         if(is.null(new.mu.sigma$mu)){
-          cat("variable selection failed, try LUCID with another seed \n")
+          if(verbose){
+            cat("variable selection failed, try LUCID with another seed \n")
+          }
           break
         }
         if(useY){
@@ -302,7 +318,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
                            check.gamma)
 
         if(!check.value){
-          cat("iteration", itr,": Invalid estimates, try LUCID with another seed \n")
+          if(verbose){
+            cat("iteration", itr,": Invalid estimates, try LUCID with another seed \n")
+          }
           break
         } else{
           res.beta <- new.beta
@@ -332,7 +350,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
 
           if(abs(res.loglik - new.loglik) < tol){
             convergence <- TRUE
-            cat("Success: Early Integration LUCID converges!", "\n\n")
+            if(verbose){
+              cat("Success: Early Integration LUCID converges!", "\n\n")
+            }
           }
           res.loglik <- new.loglik
         }
@@ -473,12 +493,16 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
       if(na_pattern[[i]]$impute_flag) {
         # initialize imputation
         if(init_impute == "mix") {
-          cat("Intializing imputation of missing values in 'Z' via the mix package \n\n")
+          if(verbose){
+            cat("Intializing imputation of missing values in 'Z' via the mix package \n\n")
+          }
           invisible(capture.output(Z[[i]] <- mclust::imputeData(Z[[i]], seed = seed)))
           Z[[i]][na_pattern[[i]]$indicator_na == 3, ] <- NA
         }
         if(init_impute == "lod") {
-          cat("Intializing imputation of missing values in 'Z' via LOD / sqrt(2) \n\n")
+          if(verbose){
+            cat("Intializing imputation of missing values in 'Z' via LOD / sqrt(2) \n\n")
+          }
           Z[[i]] <- apply(Z[[i]], 2, fill_data_lod)
           colnames(Z[[i]]) <- Znames[[i]]
         }
@@ -510,9 +534,11 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
 
 
     ## 2.1 start EM algorithm ====
-    cat("Fitting LUCID in Parallel model",
-        paste0("(", "K = ", K, ", Rho_G = ", Rho_G, ", Rho_Z_Mu = ", Rho_Z_Mu, ", Rho_Z_Cov = ", Rho_Z_Cov, ")"),
-        "\n")
+    if(verbose){
+      cat("Fitting LUCID in Parallel model",
+          paste0("(", "K = ", K, ", Rho_G = ", Rho_G, ", Rho_Z_Mu = ", Rho_Z_Mu, ", Rho_Z_Cov = ", Rho_Z_Cov, ")"),
+          "\n")
+    }
     itr <- 0
     while(!flag_converge & itr < max_itr) {
       itr <- itr + 1
@@ -527,7 +553,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
                             N = N)
 
       if(!all(is.finite(Estep_r))){
-        cat("iteration", itr,": EM algorithm collapsed: invalid estiamtes due to over/underflow, try LUCID with another seed \n")
+        if(verbose){
+          cat("iteration", itr,": EM algorithm collapsed: invalid estiamtes due to over/underflow, try LUCID with another seed \n")
+        }
         break
       } else{
         if(isTRUE(verbose)) {
@@ -546,7 +574,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
       }
 
       if(is.null(res_Mu_Sigma$Mu)){
-        cat("variable selection failed, try LUCID with another seed \n")
+        if(verbose){
+          cat("variable selection failed, try LUCID with another seed \n")
+        }
         break
       }
 
@@ -555,7 +585,9 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
                         is.finite(unlist(res_Mu_Sigma$Mu)),
                         if(useY){is.finite(unlist(res_Gamma$Gamma))})
       if(!check.value){
-        cat("iteration", itr,": Invalid estimates, try LUCID with another seed \n")
+        if(verbose){
+          cat("iteration", itr,": Invalid estimates, try LUCID with another seed \n")
+        }
         break
       }else{
         # update parameters
@@ -596,10 +628,14 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
 
       if(abs(loglik - loglik_update) < tol) {
         flag_converge <- TRUE
-        cat("Success: LUCID in parallel converges!", "\n\n")
+        if(verbose){
+          cat("Success: LUCID in parallel converges!", "\n\n")
+        }
       } else {
         loglik <- loglik_update
-        cat(paste0("iteration ", itr, ": log-likelihood = ", loglik_update, "\n"))
+        if(verbose){
+          cat(paste0("iteration ", itr, ": log-likelihood = ", loglik_update, "\n"))
+        }
       }
     }
     }

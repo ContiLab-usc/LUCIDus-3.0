@@ -98,7 +98,7 @@ An optimal LUCID model
 Fit a lucid model for integrated analysis on exposure, outcome and multi-omics data, allowing for tuning
 }
 \examples{
-\dontrun{
+\donttest{
 # LUCID early integration
 G <- sim_data$G
 Z <- sim_data$Z
@@ -107,18 +107,18 @@ Y_binary <- sim_data$Y_binary
 cov <- sim_data$Covariate
 
 # fit lucid model
-fit1 <- lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early, family = "normal")
-fit2 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", useY = FALSE)
+fit1 <- lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", family = "normal")
+fit2 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", useY = FALSE)
 
 # including covariates
-fit3 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoG = cov)
-fit4 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", CoY = cov)
+fit3 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", CoG = cov)
+fit4 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", CoY = cov)
 
 # tune K
-fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, family = "binary", K = 2:5)
+fit5 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", family = "binary", K = 2:3)
 
 # variable selection
-fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early, 
+fit6 <- lucid(G = G, Z = Z, Y = Y_binary, lucid_model = "early", 
 family = "binary", Rho_G = seq(0.01, 0.1, by = 0.01))
 
 # LUCID in parallel

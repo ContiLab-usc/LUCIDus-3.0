@@ -12,7 +12,8 @@ predict_lucid(
   Y = NULL,
   CoG = NULL,
   CoY = NULL,
-  response = TRUE
+  response = TRUE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -41,15 +42,22 @@ Categorical variable should be transformed into dummy variables.}
 
 \item{response}{If TRUE, when predicting binary outcome, the response will be
 returned. If FALSE, the linear predictor is returned.}
+
+\item{verbose}{A flag indicates whether detailed information
+is printed in console. Default is FALSE.}
 }
 \value{
-A list contains predicted latent cluster, inclusion probability and outcome for each observation
+A list containing the following components:
+\enumerate{
+\item inclusion.p: A list of inclusion probabilities for each sub-model in the LUCID model.
+\item pred.x: A list of predicted values for the data matrix G.
+\item pred.y: Predicted values for the response variable Y (if response is TRUE).
+}
 }
 \description{
 Predict cluster assignment and outcome based on LUCID model
 }
 \examples{
-\dontrun{
 # prepare data
 G <- sim_data$G
 Z <- sim_data$Z
@@ -61,5 +69,5 @@ fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", K = 2,
 # prediction on training set
 pred1 <- predict_lucid(model = fit1, G = G, Z = Z, Y = Y_normal, lucid_model = "early")
 pred2 <- predict_lucid(model = fit1, G = G, Z = Z, lucid_model = "early")
-}
+
 }

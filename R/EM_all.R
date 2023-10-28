@@ -43,7 +43,7 @@
 #' For "parallel", mclust is the default for quick convergence;
 #' For "serial", each sub-model follows the above depending on it is a "early" or "parallel"
 #' @param verbose A flag indicates whether detailed information for each iteration
-#' of EM algorithm is printed in console. Default is FALSE.(to be done)
+#' of EM algorithm is printed in console. Default is FALSE.
 #'
 #' @import mclust
 #' @import stats
@@ -70,7 +70,6 @@
 #' 17. N: number of observations
 #' 18. submodel: for LUCID in serial only, storing all the submodels
 #' @examples
-#' \dontrun{
 #' i <- 1008
 #' set.seed(i)
 #' G <- matrix(rnorm(500), nrow = 100)
@@ -89,7 +88,6 @@
 #' seed = i,
 #' CoG = CoG, CoY = CoY,
 #' useY = TRUE)
-#'}
 #' @export
 #'
 estimate_lucid <- function(lucid_model = c("early", "parallel","serial"),
@@ -173,9 +171,11 @@ estimate_lucid <- function(lucid_model = c("early", "parallel","serial"),
 
     #loop through each K
     for (i in 1:length(K)){
-      cat("Fitting LUCID in Serial model",
-          paste0("(", "Sub Model Number = ", i, ")"),
-          "\n")
+      if(verbose){
+        cat("Fitting LUCID in Serial model",
+            paste0("(", "Sub Model Number = ", i, ")"),
+            "\n")
+      }
       set.seed(seed + i * 1900)
       #simulate random Y cause we don't need Y except the last sub model
       Y_rand = runif(nrow(G))
@@ -384,7 +384,9 @@ estimate_lucid <- function(lucid_model = c("early", "parallel","serial"),
         }
       }
     }
-    cat("Success: LUCID in Serial Model is constructed!", "\n\n")
+    if(verbose){
+      cat("Success: LUCID in Serial Model is constructed!", "\n\n")
+    }
     results <- list(res_Beta = res_Beta,
                     res_Mu = res.mu.list,
                     res_Sigma = res.sigma.list,

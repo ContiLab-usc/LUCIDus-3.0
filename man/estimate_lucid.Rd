@@ -90,7 +90,7 @@ For "parallel", mclust is the default for quick convergence;
 For "serial", each sub-model follows the above depending on it is a "early" or "parallel"}
 
 \item{verbose}{A flag indicates whether detailed information for each iteration
-of EM algorithm is printed in console. Default is FALSE.(to be done)}
+of EM algorithm is printed in console. Default is FALSE.}
 }
 \value{
 A list contains the object below:
@@ -119,7 +119,6 @@ A list contains the object below:
 EM algorithm to estimate LUCID with one or multiple omics layers
 }
 \examples{
-\dontrun{
 i <- 1008
 set.seed(i)
 G <- matrix(rnorm(500), nrow = 100)
@@ -138,5 +137,4 @@ family = "normal",
 seed = i,
 CoG = CoG, CoY = CoY,
 useY = TRUE)
-}
 }

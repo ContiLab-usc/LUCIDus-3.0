@@ -25,6 +25,20 @@ test_that("check estimations of LUCID in Serial with binary outcome (K = 2,2,2,2
                                              CoG = CoG, CoY = CoY,
                                              seed = i,
                                              useY = TRUE)))
+  invisible(capture.output(list1 <- tune_lucid(G = G, Z = Z, Y = Y, K = list(2:3, 2:3, 2, 2:3, 2),
+                                               lucid_model = "serial",
+                                               family = "binary",
+                                               init_omic.data.model = "VVV",
+                                               CoG = CoG, CoY = CoY,
+                                               seed = i,
+                                               useY = TRUE,verbose_tune = TRUE)))
+  invisible(capture.output(best1 <- lucid(G = G, Z = Z, Y = Y, K = list(2:3, 2:3, 2, 2:3, 2),
+                                          lucid_model = "serial",
+                                          family = "binary",
+                                          init_omic.data.model = "VVV",
+                                          CoG = CoG, CoY = CoY,
+                                          seed = i,
+                                          useY = TRUE)))
   invisible(capture.output(best1 <- lucid(G = G, Z = Z, Y = Y, K = list(2:3, 2:3, 2, 2:3, 2),
                                               lucid_model = "serial",
                                               family = "binary",
@@ -60,8 +74,7 @@ test_that("check estimations of LUCID in Serial with binary outcome (K = 2,2,2,2
                                           family = "binary",
                                           init_omic.data.model = "VVV",
                                           seed = i,
-                                          useY = TRUE,
-                                          verbose_tune = TRUE)))
+                                          useY = TRUE)))
 
   Z <- list(Z1 = Z1, list(Z2 = Z2, Z3 = Z3), list(Z4 = Z4, Z5 = Z5))
   invisible(capture.output(list3 <- tune_lucid(G = G, Z = Z, Y = Y, K = list(3:4,list(2,2:3),list(2:3,2)),

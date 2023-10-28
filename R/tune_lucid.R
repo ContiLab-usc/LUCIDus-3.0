@@ -39,6 +39,7 @@
 #' penalty to estimate sparse cluster-specific variance-covariance matrices for omics
 #' data (Z). If it is a vector, \code{tune_lucid} will conduct
 #' model selection and variable selection. User can try penalties from 0 to 1. Work for LUCID early only.
+#' @param verbose_tune A flag to print details of tuning process.
 #' @param ... Other parameters passed to \code{estimate_lucid}
 #'
 #' @export
@@ -85,6 +86,7 @@ tune_lucid <- function(G,
                        Rho_G = 0,
                        Rho_Z_Mu = 0,
                        Rho_Z_Cov = 0,
+                       verbose_tune = FALSE,
                        ...){
   if (match.arg(lucid_model) == "early" | match.arg(lucid_model) == "parallel"){
       tune_lucid_auxi(G = G,
@@ -98,6 +100,7 @@ tune_lucid <- function(G,
                       Rho_G = Rho_G,
                       Rho_Z_Mu = Rho_Z_Mu,
                       Rho_Z_Cov = Rho_Z_Cov,
+                      verbose_tune = verbose_tune,
                       ...)
   }else if (match.arg(lucid_model) == "serial"){
     #tune lucid for parallel, Rho disabled, you can only have a fixed Rho for the LUCID early sub models
@@ -146,6 +149,7 @@ tune_lucid <- function(G,
                                         Rho_G = Rho_G,
                                         Rho_Z_Mu = Rho_Z_Mu,
                                         Rho_Z_Cov = Rho_Z_Cov,
+                                        verbose = verbose_tune,
                                         ...)
       bic[i] <- cal_bic_serial(model_list[[i]])
     }
@@ -172,6 +176,7 @@ tune_lucid_auxi <- function(G,
                        Rho_G = 0,
                        Rho_Z_Mu = 0,
                        Rho_Z_Cov = 0,
+                       verbose_tune = FALSE,
                        ...){
 
   if (match.arg(lucid_model) == "early"){
@@ -200,6 +205,7 @@ tune_lucid_auxi <- function(G,
                          Rho_G = tune_list[i, 2],
                          Rho_Z_Mu = tune_list[i, 3],
                          Rho_Z_Cov = tune_list[i, 4],
+                         verbose = verbose_tune,
                          ...))
     if("try-error" %in% class(fit)) {
       tune_list[i, 5] <- NA
@@ -241,6 +247,7 @@ tune_lucid_auxi <- function(G,
                                           family = family,
                                           lucid_model = "parallel",
                                           K = K_matrix[i, ],
+                                          verbose = verbose_tune,
                                           ...)
         bic[i] <- cal_bic_parallel(model_list[[i]])
       }
