@@ -1,5 +1,5 @@
 
-# LUCIDus: Integreted clustering with multi-view data Version 3.0.1
+# LUCIDus: LUCID with Multiple Omics Data 
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/LUCIDus?color=green)](https://cran.r-project.org/package=LUCIDus)
@@ -24,16 +24,15 @@ Lab](https://contilab.usc.edu/about/) to learn more.
 
 ## Installation
 
-You can install the development version of LUCIDus 3.0.1 from [GitHub](https://github.com/) with:
+You can install the development version of LUCIDus 3.0.1 from R CRAN with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("ContiLab-usc/LUCIDus-3.0",ref="main",auth_token = "xxx")
+install.packages("LUCIDus")
 ```
-Note that this repo is now private, so only authorized users can download this package. Please go to [tokens](https://github.com/settings/tokens) to obtain your personal authorized token and input it into auth_token = "xxx" to download this package.
+
 
 ## Workflow
-The following figure illustrate the workflow of LUCIDus 3.0.1.
+The following figure illustrates the workflow of LUCIDus 3.0.1.
 ![plot](./figure/fig2.png)
 
 
