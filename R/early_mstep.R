@@ -35,7 +35,7 @@ normal <- function(K, ...){
       colnames(Set0) <- c("Y", paste0("LC", 2:K), CoYnames)
       Yfit <- glm(as.formula(paste("Y~", paste(colnames(Set0)[-1], collapse = "+"))), data = Set0, family = gaussian)
       beta <- summary(Yfit)$coefficients[, 1]
-      beta[2:K] <- beta[1] + beta[2:K]
+      #beta[2:K] <- beta[1] + beta[2:K] #intercept is still intercept, but beta 2:K are added the intercept not effect size compared to reference
       sigma <- rep(sd(residuals(Yfit)), K)
     }
     return(structure(list(beta = beta,
@@ -106,7 +106,7 @@ binary <- function(K, ...){
     colnames(Set0) <- c("Y", paste0("LC", 2:K), CoYnames)
     Yfit <- glm(as.formula(paste("Y~", paste(colnames(Set0)[-1], collapse = "+"))), data = Set0, family ="binomial")
     beta <- coef(Yfit)
-    beta[2:K] <- beta[2:K] + beta[1] # log odds for all latent cluster
+    #beta[2:K] <- beta[2:K] + beta[1] # log odds for all latent cluster, it is not the estimate, but the estimate + intercept
     return(structure(list(beta = beta,
                           sigma = NULL)))
   }
