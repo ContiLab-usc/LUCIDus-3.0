@@ -90,7 +90,7 @@ boot_lucid <- function(G,
     dimCoG <- ncol(CoG)
     dimCoY <- ncol(CoY)
     K <- model$K
-    alldata <- as.data.frame(cbind(G, Z, Y, CoG, CoY))
+    alldata <- as.data.frame(cbind(G, Z, Y, CoG, CoY)) #need to change this, there will be error if only 1 of the Co is specified
 
     # bootstrap
     if(verbose){

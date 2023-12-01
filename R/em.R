@@ -563,20 +563,22 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
         }
       }
 
+      
       # M-step 1
       #Mstep_GtoX added penalty, but how is G exluded?
       res_Beta <- Mstep_GtoX(G = G, r = Estep_r, selectG = Select_G, penalty = Rho_G, K = K, N = N)
-      res_Mu_Sigma <- Mstep_XtoZ(Z = Z, r = Estep_r, K = K,
-                                modelNames = modelNames, N = N, na_pattern = na_pattern)
+      #We need to match the input of r for Mstep_XtoZ, it is a probability =(inclusion p)
+      E_r <- vector(mode = "list", length = nOmics)
+      
+      res_Mu_Sigma <- Mstep_XtoZ(Z = Z, r = Estep_r, selectZ = Select_Z, penalty.mu = Rho_Z_Mu, penalty.cov = Rho_Z_Cov, K = K,
+                                 modelNames = modelNames, N = N, na_pattern = na_pattern, mu = Mu)
       if(useY) {
         res_Gamma <- Mstep_XtoY(Y = Y, CoY = CoY,r = Estep_r, K = K, N = N,
-                              family = family)
+                                family = family)
       }
-
+      
       if(is.null(res_Mu_Sigma$Mu)){
-        if(verbose){
-          cat("variable selection failed, try LUCID with another seed \n")
-        }
+        cat("variable selection failed, try LUCID with another seed \n")
         break
       }
 
@@ -622,39 +624,46 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
       ###  if(Select_G) {
       ### new.loglik <- new.loglik - Rho_G * sum(abs(res.beta))
       ### }
-      ### if(Select_Z) {
-      ### new.loglik <- new.loglik - Rho_Z_Mu * sum(abs(res.mu)) - Rho_Z_Cov * sum(abs(res.sigma))
-      ### }
-
+      total_sum_Mu <- 0
+      total_sum_Sigma <- 0
+      # Loop through each matrix in 'mu'
+      for (i in length(Mu)) {
+        matrix_sum_mu <- sum(abs(Mu[[i]]))  
+        matrix_sum_sigma <- sum(abs(Sigma[[i]])) 
+        total_sum_Mu <- total_sum_Mu + matrix_sum_mu  
+        total_sum_Sigma <- total_sum_Sigma + matrix_sum_sigma
+      }
+      
+      if(Select_Z) {
+        loglik_update <- loglik_update - Rho_Z_Mu * total_sum_Mu - Rho_Z_Cov * total_sum_Sigma
+      }
+      
       if(abs(loglik - loglik_update) < tol) {
         flag_converge <- TRUE
-        if(verbose){
-          cat("Success: LUCID in parallel converges!", "\n\n")
-        }
+        cat("Success: LUCID in parallel converges!", "\n\n")
       } else {
         loglik <- loglik_update
-        if(verbose){
-          cat(paste0("iteration ", itr, ": log-likelihood = ", loglik_update, "\n"))
-        }
+        cat(paste0("iteration ", itr, ": log-likelihood = ", loglik_update, "\n"))
       }
     }
     }
 
     #Regularity to be added, but have the setup for now, we select all the G and Z for now!!!
     #if(Select_G){
-      #tt1 <- apply(pars$beta[, -1], 2, range)
-      #selectG <- abs(tt1[2, ] - tt1[1, ]) > 0.001
+    #tt1 <- apply(pars$beta[, -1], 2, range)
+    #selectG <- abs(tt1[2, ] - tt1[1, ]) > 0.001
     #} else{
-      selectG <- rep(TRUE, nG)
+    selectG <- rep(TRUE, nG)
     #}
-    #if(Select_Z){
-      #tt2 <- apply(pars$mu, 2, range)
-      #selectZ <- abs(tt2[2, ] - tt2[1, ]) > 0.001
-    #} else{
-      selectZ <- vector(mode = "list", length = nOmics)
+    selectZ <- vector(mode = "list", length = nOmics)
+    if(Select_Z){
+      for (i in 1:nOmics){
+        tt2 <- apply(t(Mu[[i]]), 2, range)
+        selectZ[[i]] <- abs(tt2[2, ] - tt2[1, ]) > 0.001
+      }
+    }else{
       for (i in 1:nOmics){selectZ[[i]] = rep(TRUE,ncol(Z[[i]]))}
-    #}
-
+    }
 
     # 3. summarize results ===============
     if(!useY) {
@@ -681,10 +690,10 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
                     Z = Z,
                     z = Estep_r,
                     init_impute = init_impute,
-                    init_par = "random" #only random init_par
-                    #Rho = list(Rho_G = Rho_G,
-                    #Rho_Z_Mu = Rho_Z_Mu,
-                    #Rho_Z_Cov = Rho_Z_Cov)
+                    init_par = "random", #only random init_par
+                    Rho = list(Rho_G = Rho_G,
+                    Rho_Z_Mu = Rho_Z_Mu,
+                    Rho_Z_Cov = Rho_Z_Cov)
     )
     class(results) <- c("lucid_parallel")
     return(results)

@@ -80,87 +80,47 @@ Mstep_GtoX <- function(G, r, selectG, penalty, K, N) {
               Beta = Beta))
 }
 
-Mstep_XtoZ <- function(Z, r, K, modelNames, N, na_pattern) {
+
+Mstep_XtoZ <- function(Z, r, selectZ, penalty.mu, penalty.cov, K, modelNames, N, na_pattern, mu){
   nOmics <- length(K)
   # store GMM model with corresponding model
-  fit <- vector(mode = "list", length = nOmics)
   Mu <- vector(mode = "list", length = nOmics)
   Sigma <- vector(mode = "list", length = nOmics)
-
-  # if 2 omics data
-  if(nOmics == 2) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      r_margin <- round(r_margin, digits = 8)
+  
+  for(i in 1:nOmics) {
+    r_margin <- t(sapply(1:N, function(j) {
+      marginSums(lastInd(r,j), margin = i)
+    }))
+    r_margin <- round(r_margin, digits = 8)
+    
+    if (selectZ){
+      temp_result = Mstep_Z_parallel(Z = Z[[i]], 
+                                     r = r_margin, 
+                                     selectZ = selectZ, penalty.mu = penalty.mu, penalty.cov = penalty.cov,
+                                     model.name = modelNames[i], K = K[i], ind.na = na_pattern[[i]]$indicator_na, mu = mu[[i]])
+      
+      
+      Mu[[i]] <- temp_result$mu
+      Sigma[[i]] <- temp_result$sigma
+    }else{
       temp_fit <- mstep(data = Z[[i]][na_pattern[[i]]$indicator_na != 3, ],
                         G = K[i],
                         z = r_margin[na_pattern[[i]]$indicator_na != 3, ],
                         modelName = modelNames[i])
-      fit[[i]] <- temp_fit
       Mu[[i]] <- temp_fit$parameters$mean
       Sigma[[i]] <- temp_fit$parameters$variance$sigma
     }
   }
-
-
-  # if 3 omics data
-  if(nOmics == 3) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      r_margin <- round(r_margin, digits = 8)
-      temp_fit <- mstep(data = Z[[i]][na_pattern[[i]]$indicator_na != 3, ],
-                        G = K[i],
-                        z = r_margin[na_pattern[[i]]$indicator_na != 3, ],
-                        modelName = modelNames[i])
-      fit[[i]] <- temp_fit
-      Mu[[i]] <- temp_fit$parameters$mean
-      Sigma[[i]] <- temp_fit$parameters$variance$sigma
-    }
-  }
-
-  # if 4 omics data
-  if(nOmics == 4) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      r_margin <- round(r_margin, digits = 8)
-      temp_fit <- mstep(data = Z[[i]][na_pattern[[i]]$indicator_na != 3, ],
-                        G = K[i],
-                        z = r_margin[na_pattern[[i]]$indicator_na != 3, ],
-                        modelName = modelNames[i])
-      fit[[i]] <- temp_fit
-      Mu[[i]] <- temp_fit$parameters$mean
-      Sigma[[i]] <- temp_fit$parameters$variance$sigma
-    }
-  }
-
-  # if 5 omics data
-  if(nOmics == 5) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      r_margin <- round(r_margin, digits = 8)
-      temp_fit <- mstep(data = Z[[i]][na_pattern[[i]]$indicator_na != 3, ],
-                        G = K[i],
-                        z = r_margin[na_pattern[[i]]$indicator_na != 3, ],
-                        modelName = modelNames[i])
-      fit[[i]] <- temp_fit
-      Mu[[i]] <- temp_fit$parameters$mean
-      Sigma[[i]] <- temp_fit$parameters$variance$sigma
-    }
-  }
-
-
-  return(list(fit = fit,
-              Mu = Mu,
+  
+  
+  
+  
+  
+  
+  return(list(Mu = Mu,
               Sigma = Sigma))
 }
+
 
 
 
@@ -390,3 +350,55 @@ Mstep_XtoY <- function(Y, r, K, N, family, CoY) {
   return(list(fit = fit,
               Gamma = Delta))
 }
+
+
+#modified Mstep_Z_parallel with LASSO penalty
+Mstep_Z_parallel <- function(Z, r, selectZ, penalty.mu, penalty.cov,
+                             model.name, K, ind.na, mu) {
+  mu = t(mu)
+  dz <- Z[ind.na != 3, ]
+  #cat("dz",dz)
+  dr <- r[ind.na != 3, ]
+  #cat("dr",dr)
+  Q <- ncol(Z)
+  #cat("Q",Q)
+  new_sigma <- array(rep(0, Q^2 * K), dim = c(Q, Q, K))
+  #cat("new_sigma",new_sigma)
+  new_mu <- matrix(rep(0, Q * K), nrow = K)
+  #cat("new_mu",new_mu)
+  
+  k <- 1
+  while(k <= K){
+    #estimate E(S_k) to be used by glasso
+    Z_mu <- t(t(dz) - mu[k, ])
+    
+    E_S <- (matrix(colSums(dr[, k] * t(apply(Z_mu, 1, function(x) return(x %*% t(x))))), Q, Q)) / sum(dr[, k])
+    
+    #use glasso and E(S_k) to estimate new_sigma and new_sigma_inv
+    l_cov <- try(glasso(E_S, penalty.cov))
+    if("try-error" %in% class(l_cov)){
+      print(paste("glasso failed, restart lucid \n"))
+      break
+    }
+    else{
+      new_sigma[, , k] <- l_cov$w
+      # function to calculate mean
+      new_mu[k, ] <- est_mu(j = k,
+                            rho = penalty.mu,
+                            z = dz,
+                            r = dr,
+                            mu = mu[k, ],
+                            wi = l_cov$wi)
+    }
+    k <- k + 1
+  }
+  if("try-error" %in% class(l_cov)){
+    return(structure(list(mu = NULL,
+                          sigma = NULL)))
+  }else{
+    return(structure(list(mu = t(new_mu),
+                          sigma = new_sigma)))
+  }
+}
+
+
