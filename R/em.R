@@ -638,14 +638,23 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
         loglik_update <- loglik_update - Rho_Z_Mu * total_sum_Mu - Rho_Z_Cov * total_sum_Sigma
       }
       
+      
       if(abs(loglik - loglik_update) < tol) {
         flag_converge <- TRUE
         cat("Success: LUCID in parallel converges!", "\n\n")
       } else {
         loglik <- loglik_update
-        cat(paste0("iteration ", itr, ": log-likelihood = ", loglik_update, "\n"))
+        if(isTRUE(verbose)) {
+          if(Select_G | Select_Z) {
+            cat("iteration", itr,": M-step finished, ", "penalized loglike = ", sprintf("%.3f", loglik_update), "\n")
+          } else{
+            cat("iteration", itr,": M-step finished, ", "loglike = ", sprintf("%.3f", loglik_update), "\n")
+          }
+        } else {
+          cat(".")
+          }
+        }
       }
-    }
     }
 
     #Regularity to be added, but have the setup for now, we select all the G and Z for now!!!
