@@ -35,7 +35,7 @@ Mstep_GtoX <- function(G, r, selectG, penalty, K, N) {
   }
 
   # if 3 omics layers
-  if(nOmics == 3) {
+  if(nOmics == 3 | nOmics == 4 |nOmics == 5) {
     for(i in 1:nOmics) {
       r_margin <- t(sapply(1:N, function(j) {
         marginSums(lastInd(r,j), margin = i)
@@ -46,31 +46,6 @@ Mstep_GtoX <- function(G, r, selectG, penalty, K, N) {
     }
   }
 
-
-  # if 4 omics layers
-  if(nOmics == 4) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      invisible(capture.output(temp_fit <- nnet::multinom(r_margin ~ G)))
-      fit[[i]] <- temp_fit
-      Beta[[i]] <- coef(temp_fit)
-    }
-  }
-
-
-  # if 5 omics layers
-  if(nOmics == 5) {
-    for(i in 1:nOmics) {
-      r_margin <- t(sapply(1:N, function(j) {
-        marginSums(lastInd(r,j), margin = i)
-      }))
-      invisible(capture.output(temp_fit <- nnet::multinom(r_margin ~ G)))
-      fit[[i]] <- temp_fit
-      Beta[[i]] <- coef(temp_fit)
-    }
-  }
 
   for (i in 1:nOmics){
     colnames(Beta[[i]])[2:length(colnames(Beta[[i]]))] = colnames(G)
@@ -189,7 +164,10 @@ Mstep_XtoY <- function(Y, r, K, N, family, CoY) {
         marginSums(lastInd(r,i), margin = 3))
     }))
     r_fit <- r_matrix[, -c(1, K[1] + 1, K[1] + K[2] + 1)]
-
+    #We actually use ip as the input for the fit of gamma
+    #but we would remove reference ip columnds
+    #so the coefficient we get for gamma are as if we fit categorical predictors
+    #but indeed we use ips for more information
     if(family == "gaussian") {
       if(is.null(CoY)) {
         fit <- lm(Y ~ r_fit)
