@@ -529,7 +529,6 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
     listwise_ind = FALSE
     
     for(i in 1:nOmics) {
-      print(Mu_Sigma$z[[i]])
       invisible(capture.output(temp_fit <- nnet::multinom(Mu_Sigma$z[[i]] ~ G[na_pattern[[i]]$indicator_na != 3, ])))
       Beta[[i]] <- coef(temp_fit)
       
