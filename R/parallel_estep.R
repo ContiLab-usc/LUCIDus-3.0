@@ -20,18 +20,30 @@ f_GtoX <- function(G, Beta_matrix) {
 
 # calculate the log likelihood for omics layer Z_j given the latent cluster X_j
 
-f_XtoZ <- function(Z, Mu_matrix, Sigma_matrix) {
+f_XtoZ <- function(Z, Mu_matrix, Sigma_matrix, na_pattern) {
+  #all obs N
   N <- nrow(Z)
   K <- ncol(Mu_matrix)
-  XtoZ <- matrix(rep(0, N * K), nrow = N)
+  XtoZ <- matrix(rep(0, N * K), nrow = N) #define XtoZ for all obs
+  
+  #subset Z
+  sub_Z = Z[na_pattern$indicator_na != 3, ]
+  N_sub <- nrow(sub_Z)
+  XtoZ_sub <- matrix(rep(0, N_sub * K), nrow = N_sub) #define XtoZ for subset of obs
+  
   for (i in 1:K) {
-    XtoZ[, i] <- mclust::dmvnorm(data = Z,
+    XtoZ_sub[, i] <- mclust::dmvnorm(data = sub_Z,
                                  mean = Mu_matrix[, i],
                                  sigma = Sigma_matrix[, , i],
                                  log = TRUE)
+    # Insert the computed results at the positions corresponding to the subset
+    XtoZ[na_pattern$indicator_na != 3, ] <- XtoZ_sub[, i]
+    XtoZ[na_pattern$indicator_na == 3, ] <- 0
+    
   }
   return(XtoZ)
 }
+
 
 
 # Calculate the log likelihood of outcome Y given all latent variables X
@@ -192,7 +204,7 @@ Estep <- function(G, Z, Y, Beta, Mu, Sigma, Delta, family, useY, na_pattern) {
       f_GtoX(G = G, Beta_matrix = Beta[[i]])
     })
     f2 <- lapply(1:2, function(i) {
-      f_XtoZ(Z = Z[[i]][na_pattern[[i]]$indicator_na != 3, ], Mu_matrix = Mu[[i]], Sigma_matrix = Sigma[[i]])
+      f_XtoZ(Z = Z[[i]], Mu_matrix = Mu[[i]], Sigma_matrix = Sigma[[i]],na_pattern = na_pattern[[i]])
     })
     if(useY) {
       f3 <- f_XtoY(Y = Y, Delta = Delta, family = family)
@@ -214,7 +226,7 @@ Estep <- function(G, Z, Y, Beta, Mu, Sigma, Delta, family, useY, na_pattern) {
       f_GtoX(G = G, Beta_matrix = Beta[[i]])
     })
     f2 <- lapply(1:3, function(i) {
-      f_XtoZ(Z = Z[[i]][na_pattern[[i]]$indicator_na != 3, ], Mu_matrix = Mu[[i]], Sigma_matrix = Sigma[[i]])
+      f_XtoZ(Z = Z[[i]], Mu_matrix = Mu[[i]], Sigma_matrix = Sigma[[i]],na_pattern = na_pattern[[i]])
     })
     if(useY) {
       f3 <- f_XtoY(Y = Y, Delta = Delta, family = family)

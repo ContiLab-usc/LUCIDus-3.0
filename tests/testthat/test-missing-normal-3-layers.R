@@ -56,16 +56,19 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2) with missi
   Z2 <- matrix(rnorm(1000), nrow = 100)
   Z2[62:65, 6:8] = NA
   Z3 <- matrix(rnorm(1000), nrow = 100)
+  Z3[50:85, ] = NA
   Z <- list(Z1 = Z1, Z2 = Z2, Z2 = Z3)
   CoY <- matrix(rnorm(200), nrow = 100)
   CoG <- matrix(rnorm(200), nrow = 100)
   Y <- rnorm(100)
-
-
-  invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), CoG = CoG, CoY = CoY,
+  
+  
+  
+  invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), 
+                                                  CoG = CoG, CoY = CoY,
                                              lucid_model = "parallel",
                                              family = "normal",
-                                             init_omic.data.model = "VVV",
+                                 
                                              seed = i,
                                              useY = TRUE,
                                              init_impute = "mix")))
@@ -95,7 +98,16 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2) with missi
   expect_equal(Gamma, 0.7024, tolerance = 0.01)
 
   expect_equal(class(fit1), "lucid_parallel")
-
+  
+  invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), 
+                                                  CoG = CoG, CoY = CoY,
+                                                  lucid_model = "serial",
+                                                  family = "normal",
+                                                  
+                                                  seed = i,
+                                                  useY = TRUE,
+                                                  init_impute = "mix")))
+  
 })
 
 

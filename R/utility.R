@@ -88,7 +88,7 @@ initialize_Sigma <- function(K, nZ) {
 
 
 
-initialize_Mu_Sigma <- function(K, Z, modelNames, na_pattern) {
+initialize_Mu_Sigma <- function(K, Z, modelNames,na_pattern) {
   nOmics <- length(K)
   Mu <- vector(mode = "list", length = nOmics)
   Sigma <- vector(mode = "list", length = nOmics)
@@ -375,3 +375,11 @@ vec_to_array <- function(K, mu) {
 
   return(res)
 }
+
+
+# Function to apply inverse logit transformation
+inverse_logit <- function(x) {
+  exp_x <- exp(x)
+  return(exp_x / (1 + exp_x))
+}
+

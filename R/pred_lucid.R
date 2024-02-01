@@ -194,6 +194,7 @@ pred_lucid <- function(model,
         mu_i = colSums(p_i * mu)
         pred.z[i,] = mu_i
       }
+      colnames(pred.z) = names(mu)
       
       results <- list(inclusion.p = res.r,
                       pred.x = pred.x,

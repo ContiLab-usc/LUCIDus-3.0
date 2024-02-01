@@ -522,13 +522,43 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
     Mu <- Mu_Sigma$Mu
     Sigma <- Mu_Sigma$Sigma
     Beta <- vector(mode = "list", length = nOmics)
+    
+    
+    #for list-wise missing obs, predict their cluster based on G and initial beta
+    complete_est_cluster <- vector(mode = "list", length = nOmics)
+    listwise_ind = FALSE
+    
     for(i in 1:nOmics) {
-      invisible(capture.output(temp_fit <- nnet::multinom(Mu_Sigma$z[[i]] ~ G)))
+      print(Mu_Sigma$z[[i]])
+      invisible(capture.output(temp_fit <- nnet::multinom(Mu_Sigma$z[[i]] ~ G[na_pattern[[i]]$indicator_na != 3, ])))
       Beta[[i]] <- coef(temp_fit)
+      
+      Beta_matrix <- rbind(rep(0, ncol(Beta[[i]])),
+                           Beta[[i]])
+      xb <- cbind(rep(1, nrow(G)), G) %*% t(Beta_matrix)
+
+      exp_xb = exp(xb)
+      exp_xb <- t(apply(exp_xb, 1, function(x) x / sum(x)))
+      complete_est_cluster[[i]] <- exp_xb
+      
+      if(any(na_pattern[[i]]$indicator_na == 3)){
+        listwise_ind = TRUE
+      }
     }
+    
+    #now that Mu_Sigma$z (inital clustering of mclust by each layer) has different obs due to list-wise missing diff between layer
+    #maybe for indicator_na == 3, use beta to assign to cluster
+    
     # Beta <- initialize_Beta(K = K, nG = nG)
-    Gamma <- initialize_Delta(K = K, CoY = CoY, family = family,
-                              z = Mu_Sigma$z, Y = Y)
+    
+    #differet Gamma initiation depending on whether we have list-wise missingness
+    if(listwise_ind == TRUE){
+      Gamma <- initialize_Delta(K = K, CoY = CoY, family = family,
+                                z = complete_est_cluster, Y = Y)
+    }else{
+      Gamma <- initialize_Delta(K = K, CoY = CoY, family = family,
+                                z = Mu_Sigma$z, Y = Y)
+    }
     loglik <- -Inf
 
 
