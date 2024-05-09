@@ -14,7 +14,8 @@
 #' outcome should be coded as 0 and 1.
 #' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel,
 #' "serial" for LUCID in serial.Now only work for LUCID early.
-#' If "parallel" or "serial", the function will do nothing.
+#' Note that for "parallel, boot will only derive CI for beta and gamma
+#' For "serial", please extract LUCID sub early/parallel models and using boot for early/parallel to derive ci
 #' @param CoG Optional, covariates to be adjusted for estimating the latent cluster.
 #' A numeric vector, matrix or data frame. Categorical variable should be transformed
 #' into dummy variables.
@@ -80,7 +81,7 @@ boot_lucid <- function(G,
     stop("Refit LUCID model with selected feature first then conduct bootstrap inference")
   }
   if (match.arg(lucid_model) == "early"){
-
+    
     # ========================== Early Integration ==========================
     G <- as.matrix(G)
     Z <- as.matrix(Z)
@@ -94,7 +95,7 @@ boot_lucid <- function(G,
 
     # bootstrap
     if(verbose){
-      cat(paste0("Use Bootstrap resampling to derive ", 100 * conf, "% CI for LUCID \n"))
+      cat(paste0("Use Bootstrap resampling to derive ", 100 * conf, "% CI for LUCID Early \n"))
     }
     #initialize progress bar object
     pb <- progress::progress_bar$new(total = R + 1)
@@ -106,6 +107,7 @@ boot_lucid <- function(G,
                       dimCoY = dimCoY,
                       dimCoG = dimCoG,
                       model = model,
+                      parallel = "multicore",
                       prog = pb)
 
     # bootstrap CIs
@@ -123,11 +125,61 @@ boot_lucid <- function(G,
     }
     else if (match.arg(lucid_model) == "parallel"){
       # ========================== Lucid in Parallel ==========================
-      stop("Sorry, Boot for Lucid in Parallel is not available yet")
+      cat("Note that for now boot for LUCID in parallel can only derive CI for beta and gamma, not for
+          mu, and the input LUCID in parallel model must have number of latent variable of 2 for each layer!")
+      G <- as.matrix(G)
+      # Record dimensions of each matrix in Z
+      dimZ_list <- sapply(Z, function(mat) dim(mat)[2])
+      Z <- do.call(cbind, Z)  # Concatenate the list of matrices into a single matrix
+      dimZ_all <- ncol(Z)
+      Y <- as.matrix(Y)
+      dimG <- ncol(G)
+      dimCoG <- ncol(CoG)
+      dimCoY <- ncol(CoY)
+      
+      K <- model$K
+      alldata <- as.data.frame(cbind(G, Z, Y, CoG, CoY)) #need to change this, there will be error if only 1 of the Co is specified
+      
+      # bootstrap
+      if(verbose){
+        cat(paste0("Use Bootstrap resampling to derive ", 100 * conf, "% CI for LUCID in Parallel \n"))
+      }
+      
+      #initialize progress bar object
+      pb <- progress::progress_bar$new(total = R + 1)
+      bootstrap <- boot(data = alldata,
+                        statistic = lucid_par_parallel,
+                        R = R,
+                        dimG = dimG,
+                        dimZ_list = dimZ_list,
+                        dimZ_all = dimZ_all,
+                        dimCoY = dimCoY,
+                        dimCoG = dimCoG,
+                        model = model,
+                        parallel = "multicore",
+                        prog = pb)
+      
+      # bootstrap CIs
+      ci <- gen_ci(bootstrap,
+                   conf = conf)
+      
+      # organize CIs
+      #beta <- ci[1:((K - 1) * dimG), ]
+      
+      #mu <- ci[((K - 1) * dimG + 1): ((K - 1) * dimG + K * dimZ), ]
+      
+      #gamma <- ci[-(1:((K - 1) * dimG + K * dimZ)), ]
+      
+      return(list(#beta = beta,
+                  #mu = mu,
+                  #gamma = gamma,
+                  ci = ci,
+                  bootstrap = bootstrap))
     }
+  
     else if (match.arg(lucid_model) == "serial"){
       # ========================== Lucid in Serial ==========================
-      stop("Sorry, Boot for Lucid in Serial is not available yet")
+      stop("For LUCID in Serial, please extract LUCID sub early/parallel models and use boot for early/parallel to derive CI")
     }
 }
 
@@ -166,6 +218,7 @@ lucid_par_early <- function(data, indices, model, dimG, dimZ, dimCoY, dimCoG, pr
                                                       CoG = CoG,
                                                       lucid_model = "early",
                                                       family = model$family,
+                                                      useY =  model$useY,
                                                       init_omic.data.model = model$init_omic.data.model,
                                                       K = K,
                                                       init_impute = model$init_impute,
@@ -204,7 +257,89 @@ lucid_par_early <- function(data, indices, model, dimG, dimZ, dimCoY, dimCoG, pr
 }
 
 
-
+# function to calculate parameters of parallel LUCID model. use as statisitc input for
+# boot function.
+lucid_par_parallel <- function(data, indices, model, dimG, dimZ_list, dimZ_all, dimCoY, dimCoG, prog) {
+  #display progress with each run of the function
+  prog$tick()
+  Sys.sleep(0.01)
+  
+  # prepare data
+  d <- data[indices, ]
+  G <- as.matrix(d[, 1:dimG])
+  
+  Z_combined <- as.matrix(d[, (dimG + 1):(dimG + dimZ_all)])
+  # Split the combined Z matrix into a list of matrices
+  Z <- vector("list", length(dimZ_list))
+  start_idx <- 1
+  for (i in seq_along(dimZ_list)) {
+    end_idx <- start_idx + dimZ_list[i] - 1
+    Z[[i]] <- as.matrix(Z_combined[, start_idx:end_idx])
+    start_idx <- end_idx + 1
+  }
+  
+  Y <- as.matrix(d[, (dimG + dimZ_all + 1)])
+  CoG <- CoY <- NULL
+  K <- model$K
+  if(!is.null(dimCoG)){
+    CoG <- as.matrix(d[, (dimG + dimZ_all + 2):(dimG + dimZ_all + dimCoG + 1)])
+  }
+  if(!is.null(dimCoY) && !is.null(dimCoG)){
+    CoY <- as.matrix(d[, (dimG + dimZ_all + dimCoG + 2):ncol(d)])
+  }
+  if(!is.null(dimCoY) && is.null(dimCoG)){
+    CoY <- as.matrix(d[, (dimG + dimZ_all + 2):ncol(d)])
+  }
+  
+  # fit lucid model
+  seed <- sample(1:2000, 1)
+  invisible(capture.output(try_lucid <- try(estimate_lucid(G = G,
+                                                      Z = Z,
+                                                      Y = Y,
+                                                      CoY = CoY,
+                                                      CoG = CoG,
+                                                      lucid_model = "parallel",
+                                                      family = ifelse(model$family == "gaussian","normal","binary"),
+                                                      init_omic.data.model = model$init_omic.data.model,
+                                                      K = K,
+                                                      useY =  model$useY,
+                                                      init_impute = model$init_impute,
+                                                      init_par = model$init_par,
+                                                      seed = seed))))
+  if ("try-error" %in% class(try_lucid)) {
+    #n_par <- sum((sapply(K, function(k) (k - 1) * dimG + k * dimZ_all))) + sum(K)  # Calculate total number of parameters
+    n_par <- sum((sapply(K, function(k) (k - 1) * dimG))) + sum(K)/2 #don't do for mu, and for Y only see effect
+    if (!is.null(dimCoG)) {
+      n_par <- n_par + sum(sapply(K, function(k) (k - 1) * dimCoG))
+    }
+    if (!is.null(dimCoY)) {
+      n_par <- n_par + sum(dimCoY)
+    }
+    par_lucid <- rep(0, n_par)
+  }  else{
+    G_par_lucid <- c()
+    for (i in 1: length(K)) {
+      G_par_lucid <- c(G_par_lucid, as.vector(try_lucid$res_Beta$Beta[[i]][, -1]))
+    }
+    par_lucid <- c(G_par_lucid,
+                   #as.vector(t(try_lucid$res_Mu)), don't do mu for now
+                   try_lucid$res_Gamma$fit$coefficients[-1])
+    G_names <- c()
+    for (i in 1: length(K)) {
+      G_names <- c(G_names, paste0(colnames(try_lucid$res_Beta$Beta[[i]])[-1],
+               ".cluster2", ".Layer", i))
+    }
+    Y_names <- names(try_lucid$res_Gamma$fit$coefficients[-1])
+    #if(is.null(names(try_lucid$res_Gamma$fit$coefficients[-1]))) {
+      #Y_names <- paste0("LC", 2:K)
+    #} else {
+      #Y_names <- names(try_lucid$res_Gamma$beta)
+    #}
+    names(par_lucid) <- c(G_names,Y_names) #not considering Z right now
+    converge <- TRUE
+  }
+  return(par_lucid)
+}
 
 #' @title generate bootstrp ci (normal, basic and percentile)
 #'

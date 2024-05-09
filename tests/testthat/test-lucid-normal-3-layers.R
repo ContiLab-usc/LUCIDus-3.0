@@ -18,17 +18,26 @@ test_that("check estimations of LUCID with normal outcome (K = 2,2,2)", {
   invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), CoG = CoG, CoY = CoY,
                                                   lucid_model = "parallel",
                                                   family = "normal",
-                                                  init_omic.data.model  = "VVV",
+                                                  init_omic.data.model  = NULL,
                                                   seed = i,
                                                   init_impute = "mix",
                                                   init_par = "mclust",
                                                   useY = TRUE)))
   
-  
+  bootfit1 <- boot_lucid(G,
+                         Z,
+                         Y,
+                         lucid_model = "parallel",
+                         CoG = CoG, CoY = CoY,
+                         fit1,
+                         conf = 0.95,
+                         R = 10,
+                         verbose = FALSE)
+  bootfit1$ci
   invisible(capture.output(fit1 <- estimate_lucid(G = G, Z = Z, Y = Y, K = c(2, 2, 2), CoG = CoG, CoY = CoY,
                                                   lucid_model = "parallel",
                                                   family = "normal",
-                                                  init_omic.data.model  = "VVV",
+                                                  init_omic.data.model  = "EEV",
                                                   seed = i,
                                                   init_impute = "mix",
                                                   init_par = "mclust",

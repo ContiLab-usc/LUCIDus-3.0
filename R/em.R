@@ -475,7 +475,7 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
     }else{
       family = "binomial"
     }
-    modelNames =  rep(init_omic.data.model, length(K))
+    
 
     dimCoG <- ifelse(is.null(CoG), 0, ncol(CoG))
     dimCoY <- ifelse(is.null(CoY), 0, ncol(CoY))
@@ -508,7 +508,24 @@ est_lucid <- function(lucid_model = c("early", "parallel"),
         }
 
       }}
-
+    
+    #if null for init_omic.data.model, automatically fit every omic model for each layer
+    mclust.fit <- vector("list", length(Z))
+    modelNames <- c()
+    if(is.null(init_omic.data.model)){
+      for(i in 1:nOmics) {
+        invisible(capture.output(mclust.fit[[i]] <- Mclust(Z[[i]][na_pattern[[i]]$indicator_na != 3, ],
+                                                           G = K[i],
+                                                           modelNames = init_omic.data.model)))
+        modelNames <- c(modelNames, mclust.fit[[i]]$modelName)
+      }
+      
+    }else{
+      modelNames =  rep(init_omic.data.model, length(K))
+    }
+    
+    print(modelNames)
+    
     tot.itr <- 0
     flag_converge <- FALSE
     while(!flag_converge && tot.itr <= max_tot.itr) {
