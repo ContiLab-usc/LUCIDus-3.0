@@ -1,5 +1,5 @@
 
-# LUCIDus 3.1.2: LUCID with Multiple Omics Data 
+# LUCIDus 3.1.2: LUCID with Multiple Omics Data (The CRAN Version is 3.0.1)
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/LUCIDus?color=green)](https://cran.r-project.org/package=LUCIDus)
@@ -39,7 +39,7 @@ The following figure illustrates the workflow of LUCIDus 3.0.1.
 ## Usage
 
 Please refer to the
-[tutorial](https://USCbiostats.github.io/LUCIDus/articles/LUCIDus.html).
+[R manual](https://USCbiostats.github.io/LUCIDus/articles/LUCIDus.html).
 
 ## Citation
 
@@ -54,9 +54,9 @@ Please refer to the
     #> 
     #> To cite LUCIDus R package, please use:
     #> 
-    #>   Yinqi Zhao (2022). LUCIDus: an R package to implement the LUCID
-    #>   model. CRAN. R package version 2.2 URL
-    #>   https://yinqi93.github.io/LUCIDus/index.html
+    #>   Qiran Jia (2023). LUCIDus: LUCID with Multiple Omics Data.
+    #>   CRAN. R package version 3.0.1 URL
+    #>   https://cran.r-project.org/web/packages/LUCIDus/index.html
     #> 
     #> To see these entries in BibTeX format, use 'print(<citation>,
     #> bibtex=TRUE)', 'toBibtex(.)', or set
