@@ -16,7 +16,7 @@ Multi-Omics Data (LUCID) with Phenotypic Traits](https://doi.org/10.1093/bioinfo
 
 LUCID version 3.0.1, a major update and enhancement from the original release, implements different integration strategies for multi-omics data with multiple layers including LUCID early integration, LUCID in parallel, and LUCID in serial. It also incorporates methods to deal with missingness in multi-omics data. The following DAG illustrates the three different LUCID models for three integration strategies.
 
-![plot](./figure/fig1.png)
+![plot](./figure/fig1.pdf)
 
 If you are interested in the integration of omic data to estimate mediator or latent structures, please check out [Conti
 Lab](https://contilab.usc.edu/about/) to learn more.
@@ -34,7 +34,7 @@ install.packages("LUCIDus")
 
 ## Workflow
 The following figure illustrates the workflow of LUCIDus 3.0.1.
-![plot](./figure/fig2.png)
+![plot](./figure/fig2.pdf)
 
 
 ## Usage
