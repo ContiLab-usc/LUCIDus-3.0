@@ -1,5 +1,5 @@
 
-# LUCIDus: LUCID with Multiple Omics Data 
+# LUCIDus 3.1.2: LUCID with Multiple Omics Data 
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/LUCIDus?color=green)](https://cran.r-project.org/package=LUCIDus)
