@@ -7,7 +7,8 @@
 [![](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-image-badge.svg)](https://image.usc.edu)
 <!-- badges: end -->
 
-
+This repo stores the source code for LUCIDus 3.1.2, which has not been pushed to CRAN yet. The CRAN Version of LUCIDus is 3.0.1. Compared to 3.0.1, the current version fixed several bugs in extreme cases. Also, automated model selection for each LUCID model is available to obtain the optimal number of latent clusters, and an integrated imputation approach is implemented to handle sporadic and list-wise missing multiple omics data. Regularity for LUCID in parallel and G-computation features to obtain a causal interpretation of the parameters of exposures were added. Missing data imputation for LUCID in parallel fixed for list-wise missingness. Added some plotting functions. Added boot for parallel (LC = 2 for each layer)
+If you wish to enjoy these features, please download and use LUCIDus 3.1.2 (may not be stable), otherwise, please download version 3.0.1 from CRAN and see the details of version 3.0.1 below.
 
 The **LUCIDus** package implements the statistical method LUCID proposed in the research paper [A Latent Unknown Clustering Integrating
 Multi-Omics Data (LUCID) with Phenotypic Traits](https://doi.org/10.1093/bioinformatics/btz667)
@@ -39,7 +40,7 @@ The following figure illustrates the workflow of LUCIDus 3.0.1.
 ## Usage
 
 Please refer to the
-[R manual](https://USCbiostats.github.io/LUCIDus/articles/LUCIDus.html).
+[R manual](https://cran.r-project.org/web/packages/LUCIDus/LUCIDus.pdf).
 
 ## Citation
 
