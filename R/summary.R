@@ -1,9 +1,8 @@
-#' @title Summarize results of the LUCID model
-#'
-#' @param object A LUCID model fitted by \code{\link{estimate_lucid}}
-#' @param boot.se An object returned by \code{\link{boot_lucid}},
-#' which contains the bootstrap confidence intervals
-#' @return A list, containing the extracted key parameters from the LUCID model that can be used to print the summary table
+#' @title Summarize a LUCID Model
+#' @description Summarizes the results of a fitted LUCID model.
+#' @param object A fitted LUCID model object.
+#' @param boot.se Optional, bootstrapped standard errors.
+#' @return A summary object specific to the LUCID model type.
 #' @export
 #' @examples
 #' \donttest{
@@ -24,11 +23,16 @@
 #'
 #' # summarize lucid model with bootstrap CIs
 #' summary_lucid(fit1, boot.se = boot1)
+#' 
+#' # print lucid model summary
+#' print(fit1)
 #' }
+#' 
+#' 
 
 summary_lucid <- function(object, boot.se = NULL){
   if (inherits(object, "early_lucid") | inherits(object, "lucid_parallel")){
-    summary_lucid_auxi(object = object, boot.se = boot.se)
+    print.sumlucid(summary_lucid_auxi(object = object, boot.se = boot.se))
   }
   else if (inherits(object, "lucid_serial")){
     K = object$K
@@ -37,13 +41,13 @@ summary_lucid <- function(object, boot.se = NULL){
     summary.list <- vector(mode = "list", length = n_submodels)
     for (i in 1:n_submodels){
       summary.list[[i]] = summary_lucid_auxi(submodels[[i]])
-
+      
       # correct the submodel elements
       #if (i != 1){
-        #names(summary.list[[i]])[1] = "delta"
+      #names(summary.list[[i]])[1] = "delta"
       #}
       #if (i != n_submodels){
-        #summary.list[[i]] = summary.list[[i]][-3]
+      #summary.list[[i]] = summary.list[[i]][-3]
       #}
     }
     BIC = cal_bic_serial(object)
@@ -51,11 +55,11 @@ summary_lucid <- function(object, boot.se = NULL){
     results <- list(summary.list = summary.list,
                     BIC = BIC,
                     loglik = loglik
-                    )
-
+    )
+    
     #return a list of sumlucid object for each submodel
     class(results) <- "sumlucid_serial"
-    return(results)
+    print.sumlucid(results)
   }
 }
 
@@ -117,9 +121,9 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
     }
     #compute number of parameters for X to Y association and add
     npars = npars + nY
-
+    
     BIC <- -2 * object$likelihood + npars * log(nrow(object$inclusion.p[[1]]))
-
+    
     results <- list(beta = object$res_Beta,
                     mu = object$res_Mu,
                     Gamma = object$res_Gamma,
@@ -132,7 +136,7 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
     )
     class(results) <- "sumlucid_parallel"
     return(results)
-
+    
   }
 }
 
@@ -164,7 +168,8 @@ summary_lucid_auxi <- function(object, boot.se = NULL){
 #' print.sumlucid(summary_lucid(fit1, boot.se = boot1))
 #' }
 
-print.sumlucid<- function(x, ...){
+
+print.sumlucid <- function(x, ...){
   if (inherits(x, "sumlucid_early") | inherits(x, "sumlucid_parallel")){
     print.sumlucid_auxi(x)
   }
@@ -182,44 +187,44 @@ print.sumlucid<- function(x, ...){
     cat("\n \n")
     cat("----------Overall Summary of the LUCID in Serial model---------- \n \n")
     cat("log likelihood =", x$loglik, ", BIC = ", x$BIC, "\n \n")
-
-
+    
+    
   }
 }
 
 
 print.sumlucid_auxi <- function(x, ...){
   if(inherits(x, "sumlucid_early")){
-  K <- x$K
-  beta <- as.data.frame(x$beta)
-  dim1 <- ncol(beta) - 1
-  z.mean <- as.data.frame(t(x$mu))
-  cat("----------Summary of the LUCID Early Integration model---------- \n \n")
-  cat("K = ", K, ", log likelihood =", x$loglik, ", BIC = ", x$BIC, "\n \n")
-  y <- switch(x$family, normal = f.normal.early,
-              binary = f.binary.early)
-  y(x$gamma, K, se = x$boot.se$gamma)
-  cat("\n")
-  cat("(2) Z: mean of omics data for each latent cluster \n")
-  if(is.null(x$boot.se)){
-    colnames(z.mean) <- paste0("mu_cluster", 1:K)
-    print(z.mean)
-  } else{
-    print(x$boot.se$mu)
-  }
-  cat("\n")
-  cat("(3) E: odds ratio of being assigned to each latent cluster for each exposure \n")
-  if(is.null(ncol(beta))) {
-    cat("no exposure is selected given current penalty Rho_G, please use a smaller penalty")
-  } else {
-    dd <- as.matrix(as.data.frame(beta)[2:K, 2:ncol(beta)])
-    g.or <- data.frame(beta = unlist(split(dd, row(dd))))
-    rownames(g.or) <- paste0(colnames(beta)[-1], ".cluster", sapply(2:K, function(x) return(rep(x, dim1))))
+    K <- x$K
+    beta <- as.data.frame(x$beta)
+    dim1 <- ncol(beta) - 1
+    z.mean <- as.data.frame(t(x$mu))
+    cat("----------Summary of the LUCID Early Integration model---------- \n \n")
+    cat("K = ", K, ", log likelihood =", x$loglik, ", BIC = ", x$BIC, "\n \n")
+    y <- switch(x$family, normal = f.normal.early,
+                binary = f.binary.early)
+    y(x$gamma, K, se = x$boot.se$gamma)
+    cat("\n")
+    cat("(2) Z: mean of omics data for each latent cluster \n")
     if(is.null(x$boot.se)){
-      g.or$OR <- exp(g.or$beta)
-      print(g.or)
+      colnames(z.mean) <- paste0("mu_cluster", 1:K)
+      print(z.mean)
     } else{
-      print(x$boot.se$beta)
+      print(x$boot.se$mu)
+    }
+    cat("\n")
+    cat("(3) E: odds ratio of being assigned to each latent cluster for each exposure \n")
+    if(is.null(ncol(beta))) {
+      cat("no exposure is selected given current penalty Rho_G, please use a smaller penalty")
+    } else {
+      dd <- as.matrix(as.data.frame(beta)[2:K, 2:ncol(beta)])
+      g.or <- data.frame(beta = unlist(split(dd, row(dd))))
+      rownames(g.or) <- paste0(colnames(beta)[-1], ".cluster", sapply(2:K, function(x) return(rep(x, dim1))))
+      if(is.null(x$boot.se)){
+        g.or$OR <- exp(g.or$beta)
+        print(g.or)
+      } else{
+        print(x$boot.se$beta)
       }
     }
   }
@@ -244,7 +249,7 @@ print.sumlucid_auxi <- function(x, ...){
         print(z.mean[[i]])
         cat("\n \n")
       }
-
+      
     }else{
       print(x$boot.se$mu)
     }
@@ -254,20 +259,20 @@ print.sumlucid_auxi <- function(x, ...){
       cat("no exposure is selected given current penalty Rho_G, please use a smaller penalty")
     } else {
       for (i in 1:length(K)){
-      cat("Layer ",i, "\n \n")
-      dd <- as.matrix(as.data.frame(beta[[i]][, -1]))
-      g.or <- data.frame(beta = unlist(split(dd, row(dd))))
-
-      rownames(g.or) <- paste0(colnames(beta[[i]])[-1], ".cluster", sapply(2:K[i], function(x) return(rep(x, dim1))))
-
-
-      if(is.null(x$boot.se)){
-        g.or$OR <- exp(g.or$beta)
-        print(g.or)
-      } else{
-        print(x$boot.se$beta)
-      }
-      cat("\n \n")
+        cat("Layer ",i, "\n \n")
+        dd <- as.matrix(as.data.frame(beta[[i]][, -1]))
+        g.or <- data.frame(beta = unlist(split(dd, row(dd))))
+        
+        rownames(g.or) <- paste0(colnames(beta[[i]])[-1], ".cluster", sapply(2:K[i], function(x) return(rep(x, dim1))))
+        
+        
+        if(is.null(x$boot.se)){
+          g.or$OR <- exp(g.or$beta)
+          print(g.or)
+        } else{
+          print(x$boot.se$beta)
+        }
+        cat("\n \n")
       }
     }
   }
@@ -276,9 +281,9 @@ print.sumlucid_auxi <- function(x, ...){
 
 # summarize output of normal outcome for early
 f.normal.early <- function(x, K, se){
-
+  
   cat("(1) Y (continuous outcome): effect size of Y for each latent cluster (and effect of covariates if included) \n")
-
+  
   if(!is.null(se)){
     y <- se
   } else {
@@ -288,7 +293,7 @@ f.normal.early <- function(x, K, se){
     y[1,] = 0
     row.names(y)[1:K] <- paste0("cluster", 1:K)
     colnames(y) <- "Gamma"
-
+    
   }
   print(y)
 }
@@ -310,9 +315,9 @@ f.binary.early <- function(x, K, se){
 
 # summarize output of normal outcome for parallel
 f.normal.parallel <- function(x, K, se){
-
+  
   cat("(1) Y (continuous outcome): effects of each non-reference latent cluster for each layer of Y (and effect of covariates if included) \n")
-
+  
   if(!is.null(se)){
     y <- se
   } else {
@@ -326,7 +331,7 @@ f.normal.parallel <- function(x, K, se){
       row.names(gamma)[counter:end] <- paste0("cluster", 2:K[i],"Layer",i)
       counter = end
     }
-
+    
     colnames(gamma) <- "Gamma"
   }
   print(gamma)
@@ -378,7 +383,7 @@ reorder_Delta <- function(ref, Delta) {
   K <- Delta$K
   mu_matrix <- vec_to_array(K = K, mu = Delta$mu)
   mu <- mu_matrix[ref]
-
+  
   # if 1 omics layers
   if(length(K) == 1) {
     # reorder K1
@@ -391,11 +396,11 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
-
+    
+    
     K_order <- list(K1 = k1_order)
   }
-
+  
   # if 2 omics layers
   if(length(K) == 2) {
     # reorder K1
@@ -408,7 +413,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
+    
     # reorder K2
     mu_k2 <- rep(0, K[2])
     for(i in 1:K[2]) {
@@ -419,12 +424,12 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 2
     k2 <- order(mu_k2)
     k2_order <- c(ref[2], k2[k2 != ref[2]])
-
+    
     K_order <- list(K1 = k1_order,
                     K2 = k2_order)
   }
-
-
+  
+  
   # if 3 omics layers
   if(length(K) == 3) {
     # reorder K1
@@ -437,7 +442,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
+    
     # reorder K2
     mu_k2 <- rep(0, K[2])
     for(i in 1:K[2]) {
@@ -448,7 +453,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 2
     k2 <- order(mu_k2)
     k2_order <- c(ref[2], k2[k2 != ref[2]])
-
+    
     # reorder K3
     mu_k3 <- rep(0, K[3])
     for(i in 1:K[3]) {
@@ -459,14 +464,14 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 3
     k3 <- order(mu_k3)
     k3_order <- c(ref[3], k3[k3 != ref[3]])
-
-
+    
+    
     K_order <- list(K1 = k1_order,
                     K2 = k2_order,
                     K3 = k3_order)
   }
-
-
+  
+  
   # if 4 omics layers
   if(length(K) == 4) {
     # reorder K1
@@ -479,7 +484,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
+    
     # reorder K2
     mu_k2 <- rep(0, K[2])
     for(i in 1:K[2]) {
@@ -490,7 +495,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 2
     k2 <- order(mu_k2)
     k2_order <- c(ref[2], k2[k2 != ref[2]])
-
+    
     # reorder K3
     mu_k3 <- rep(0, K[3])
     for(i in 1:K[3]) {
@@ -501,7 +506,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 3
     k3 <- order(mu_k3)
     k3_order <- c(ref[3], k3[k3 != ref[3]])
-
+    
     # reorder K4
     mu_k4 <- rep(0, K[4])
     for(i in 1:K[4]) {
@@ -512,13 +517,13 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 4
     k4 <- order(mu_k4)
     k4_order <- c(ref[4], k4[k4 != ref[4]])
-
+    
     K_order <- list(K1 = k1_order,
                     K2 = k2_order,
                     K3 = k3_order,
                     K4 = k4_order)
   }
-
+  
   # if 5 omics layers
   if(length(K) == 5) {
     # reorder K1
@@ -531,7 +536,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
+    
     # reorder K2
     mu_k2 <- rep(0, K[2])
     for(i in 1:K[2]) {
@@ -542,7 +547,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 2
     k2 <- order(mu_k2)
     k2_order <- c(ref[2], k2[k2 != ref[2]])
-
+    
     # reorder K3
     mu_k3 <- rep(0, K[3])
     for(i in 1:K[3]) {
@@ -553,7 +558,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 3
     k3 <- order(mu_k3)
     k3_order <- c(ref[3], k3[k3 != ref[3]])
-
+    
     # reorder K4
     mu_k4 <- rep(0, K[4])
     for(i in 1:K[4]) {
@@ -564,7 +569,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 4
     k4 <- order(mu_k4)
     k4_order <- c(ref[4], k4[k4 != ref[4]])
-
+    
     # reorder K5
     mu_k5 <- rep(0, K[5])
     for(i in 1:K[5]) {
@@ -575,16 +580,16 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 5
     k5 <- order(mu_k5)
     k5_order <- c(ref[5], k5[k5 != ref[5]])
-
-
+    
+    
     K_order <- list(K1 = k1_order,
                     K2 = k2_order,
                     K3 = k3_order,
                     K4 = k4_order,
                     K5 = k5_order)
   }
-
-
+  
+  
   # if 6 omics layers
   if(length(K) == 6) {
     # reorder K1
@@ -597,7 +602,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 1
     k1 <- order(mu_k1)
     k1_order <- c(ref[1], k1[k1 != ref[1]])
-
+    
     # reorder K2
     mu_k2 <- rep(0, K[2])
     for(i in 1:K[2]) {
@@ -608,7 +613,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 2
     k2 <- order(mu_k2)
     k2_order <- c(ref[2], k2[k2 != ref[2]])
-
+    
     # reorder K3
     mu_k3 <- rep(0, K[3])
     for(i in 1:K[3]) {
@@ -619,7 +624,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 3
     k3 <- order(mu_k3)
     k3_order <- c(ref[3], k3[k3 != ref[3]])
-
+    
     # reorder K4
     mu_k4 <- rep(0, K[4])
     for(i in 1:K[4]) {
@@ -630,7 +635,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 4
     k4 <- order(mu_k4)
     k4_order <- c(ref[4], k4[k4 != ref[4]])
-
+    
     # reorder K5
     mu_k5 <- rep(0, K[5])
     for(i in 1:K[5]) {
@@ -641,7 +646,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 5
     k5 <- order(mu_k5)
     k5_order <- c(ref[5], k5[k5 != ref[5]])
-
+    
     # reorder K6
     mu_k6 <- rep(0, K[6])
     for(i in 1:K[6]) {
@@ -652,7 +657,7 @@ reorder_Delta <- function(ref, Delta) {
     # order of re-arranged cluster for omics 6
     k6 <- order(mu_k6)
     k6_order <- c(ref[6], k6[k6 != ref[6]])
-
+    
     K_order <- list(K1 = k1_order,
                     K2 = k2_order,
                     K3 = k3_order,
@@ -660,8 +665,8 @@ reorder_Delta <- function(ref, Delta) {
                     K5 = k5_order,
                     K6 = k6_order)
   }
-
-
+  
+  
   Delta$mu <- mu
   return(list(Delta = Delta,
               K_order = K_order))
@@ -694,7 +699,7 @@ reorder_Beta <- function(Beta, K_order) {
     }
     Beta[[i]] <- temp_Beta_reorder[-1, ]
   }
-
+  
   return(Beta)
 }
 
@@ -756,26 +761,26 @@ cal_bic_parallel <- function(object) {
   }
   #compute number of parameters for X to Y association and add
   npars = npars + nY
-
+  
   BIC <- -2 * object$likelihood + npars * log(nrow(object$inclusion.p[[1]]))
-
+  
   return(BIC)
 }
 
 # function to calculate BIC for LUCID in serial
 cal_bic_serial <- function(object) {
-
+  
   sum_all_sub = summary_lucid_simple(object)
   BIC = 0
   for (i in 1:length(sum_all_sub)){
     BIC_temp = sum_all_sub[[i]]$BIC
     BIC = BIC + BIC_temp
-    }
+  }
   return(BIC)
 }
 
 cal_loglik_serial <- function(object) {
-
+  
   sum_all_sub = summary_lucid_simple(object)
   loglik = 0
   for (i in 1:length(sum_all_sub)){
@@ -784,4 +789,3 @@ cal_loglik_serial <- function(object) {
   }
   return(loglik)
 }
-

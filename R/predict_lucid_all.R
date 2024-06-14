@@ -1,48 +1,35 @@
-#' @title Predict cluster assignment and outcome based on LUCID model using new data of G,Z,(Y).
-#' If g_computation, predict cluster assignment, omics data, and outcome based on LUCID model using new data of G only
-#' This function can also be use to extract X assignment is using training data G,Z,Y as input.
-#' @param model A model fitted and returned by \code{\link{estimate_lucid}}
-#' @param lucid_model Specifying LUCID model, "early" for early integration, "parallel" for lucid in parallel
-#' "serial" for lucid in serial.
-#' @param G Exposures, a numeric vector, matrix, or data frame. Categorical variable
-#' should be transformed into dummy variables. If a matrix or data frame, rows
-#' represent observations and columns correspond to variables.
-#' @param Z Omics data, if "early", an N by M matrix; If "parallel", a list, each element i is a matrix with N rows and P_i features;
-#' If "serial", a list, each element i is a matrix with N rows and p_i features or a list with two or more matrices with N rows and a certain number of features
-#' @param Y Outcome, a numeric vector. Categorical variable is not allowed. Binary
-#' outcome should be coded as 0 and 1.
-#' @param CoG Optional, covariates to be adjusted for estimating the latent cluster.
-#' A numeric vector, matrix or data frame. Categorical variable should be transformed
-#' into dummy variables.
-#' @param CoY Optional, covariates to be adjusted for estimating the association
-#' between latent cluster and the outcome. A numeric vector, matrix or data frame.
-#' Categorical variable should be transformed into dummy variables.
-#' @param response If TRUE, when predicting binary outcome, the response will be
-#' returned. If FALSE, the linear predictor is returned.
-#' @param g_computation If TRUE, the prediction only uses information on G.
-#' @param verbose A flag indicates whether detailed information
-#' is printed in console. Default is FALSE.
+#' @title Predict Cluster Assignment and Outcome Based on LUCID Model
+#' @description This function predicts cluster assignment and outcome based on a fitted LUCID model using new data for G, Z, and Y. If `g_computation` is TRUE, it predicts cluster assignment, omics data, and outcome using new data for G only. It can also be used to extract X assignment using training data G, Z, and Y as input.
+#' @param model A model fitted and returned by \code{\link{estimate_lucid}}.
+#' @param lucid_model A string specifying the LUCID model type: "early" for early integration, "parallel" for parallel integration, and "serial" for serial integration.
+#' @param G Exposures, provided as a numeric vector, matrix, or data frame. Categorical variables should be transformed into dummy variables. If a matrix or data frame, rows represent observations and columns correspond to variables.
+#' @param Z Omics data. For "early" integration, an N by M matrix; for "parallel" integration, a list where each element is a matrix with N rows and P_i features; for "serial" integration, a list where each element is either a matrix with N rows and p_i features or another list with two or more matrices with N rows and a certain number of features.
+#' @param Y Outcome, provided as a numeric vector. Categorical variables are not allowed. Binary outcomes should be coded as 0 and 1.
+#' @param CoG Optional covariates to be adjusted for estimating the latent cluster. Provided as a numeric vector, matrix, or data frame. Categorical variables should be transformed into dummy variables.
+#' @param CoY Optional covariates to be adjusted for estimating the association between the latent cluster and the outcome. Provided as a numeric vector, matrix, or data frame. Categorical variables should be transformed into dummy variables.
+#' @param response Logical. If TRUE, the response will be returned for binary outcomes; if FALSE, the linear predictor is returned. Default is TRUE.
+#' @param g_computation Logical. If TRUE, the prediction uses only information on G. Default is FALSE.
+#' @param verbose Logical. If TRUE, detailed information is printed in the console. Default is FALSE.
 #' @return A list containing the following components:
-#' 1. inclusion.p: A list of inclusion probabilities for each sub-model in the LUCID model.
-#' 2. pred.x: A list of predicted values for the data matrix G.
-#' 3. pred.y: Predicted values for the response variable Y (if response is TRUE).
-#' 4. pred.z: Predicted values for the omics variables Z (if g_computation is TRUE).
-#' 
-#' @export
-#'
+#' \itemize{
+#'   \item \code{inclusion.p}: A list of inclusion probabilities for each sub-model in the LUCID model.
+#'   \item \code{pred.x}: A list of predicted values for the data matrix G.
+#'   \item \code{pred.y}: Predicted values for the response variable Y (if \code{response} is TRUE).
+#'   \item \code{pred.z}: Predicted values for the omics variables Z (if \code{g_computation} is TRUE).
+#' }
 #' @examples
-#' # prepare data
+#' # Prepare data
 #' G <- sim_data$G
 #' Z <- sim_data$Z
 #' Y_normal <- sim_data$Y_normal
 #'
-#' # fit lucid model
+#' # Fit LUCID model
 #' fit1 <- estimate_lucid(G = G, Z = Z, Y = Y_normal, lucid_model = "early", K = 2, family = "normal")
 #'
-#' # prediction on training set
+#' # Prediction on training set
 #' pred1 <- predict_lucid(model = fit1, G = G, Z = Z, Y = Y_normal, lucid_model = "early")
 #' pred2 <- predict_lucid(model = fit1, G = G, Z = Z, lucid_model = "early")
-#' 
+#' @export
 
 
 predict_lucid <- function(model,
